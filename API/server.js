@@ -16,7 +16,7 @@ const private = require('./routes/private');
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
-app.use(express.static(path.join(__dirname, '../dist')));
+app.use(express.static(path.join(__dirname, '../dist/catalk')));
 
 app.use('/api', public);
 app.use('/private', private);
