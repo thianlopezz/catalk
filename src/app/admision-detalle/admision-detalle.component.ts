@@ -142,7 +142,7 @@ export class AdmisionDetalleComponent implements OnInit, AfterViewInit {
       return;
     } else if (detalle.index < this.detalles.length - 1) {
 
-      const elementoAbajo = this.admision.requisitos[detalle.index + 1];
+      const elementoAbajo = this.admision.detalles[detalle.index + 1];
       this.admision.detalles[detalle.index + 1] = detalle.descripcion;
       this.admision.detalles[detalle.index] = elementoAbajo;
     }
