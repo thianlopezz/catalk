@@ -1,0 +1,37 @@
+<form name="form" (ngSubmit)="guardar(f)" #f="ngForm">
+  <div class="row">
+    <div class="input-field col s12 m10">
+      <input id="tipoAdmision" name="tipoAdmision" type="text" class="validate" [ngClass]="{'invalid': f.submitted && !tipoAdmision.valid }"
+        [(ngModel)]="model.tipoAdmision" #tipoAdmision="ngModel" required>
+      <label for="tipoAdmision">Tipo de admisión</label>
+    </div>
+    <div class="input-field col s12 m2">
+      <input id="valor" name="valor" type="text" class="validate" [ngClass]="{'invalid': f.submitted && !valor.valid }"
+        [(ngModel)]="model.valor" #valor="ngModel" required>
+      <label for="tipoAdmision">Valor</label>
+    </div>
+    <div class="input-field col s12 m6">
+      <input id="feInicio" type="text" class="datepicker validate" required>
+      <label for="feInicio">Fecha de inicio</label>
+    </div>
+    <div class="input-field col s12 m6">
+      <input id="feFin" type="text" class="datepicker validate">
+      <label for="feFin">Fecha de finalización</label>
+    </div>
+    <div class="input-field col s12">
+      <textarea id="descripcion" name="descripcion" class="materialize-textarea validate" [ngClass]="{'invalid': f.submitted && !descripcion.valid }"
+        [(ngModel)]="model.descripcion" #descripcion="ngModel" required></textarea>
+      <label for="descripcion">Descripción</label>
+    </div>
+  </div>
+  <div class="row">
+    <button class="btn waves-effect waves-light col s12 m5 offset-m1" type="submit">
+      Guardar
+      <i class="material-icons right">save</i>
+    </button>
+    <button class="waves-effect waves-green btn-flat col s12 m5" type="button" (click)="_cancelar()">
+      Cancelar
+      <i class="material-icons right">cancel</i>
+    </button>
+  </div>
+</form>

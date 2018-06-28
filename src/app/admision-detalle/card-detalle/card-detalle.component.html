@@ -1,0 +1,33 @@
+<div class="card-panel row valign-wrapper p-0">
+  <div *ngIf="!model.accion" class="col s9">
+    <p>{{model.descripcion}}</p>
+  </div>
+  <div *ngIf="model.accion==='I' || model.accion==='U'" class="col s10">
+    <div class="input-field col s12">
+      <textarea id="descripcion" name="descripcion" class="materialize-textarea" [(ngModel)]="model.descripcion" #descripcion="ngModel"></textarea>
+      <label for="descripcion">Descripción</label>
+    </div>
+  </div>
+  <div *ngIf="!model.accion" class="col s3 center-align">
+    <a href="javacript:;" class="mx-1" (click)="_editar()">
+      <i class="material-icons">edit</i>
+    </a>
+    <a href="javacript:;" class="ml-1" (click)="_arriba()">
+      <i class="material-icons">expand_less</i>
+    </a>
+    <a href="javacript:;" class="mr-1" (click)="_abajo()">
+      <i class="material-icons">expand_more</i>
+    </a>
+    <a href="javacript:;" class="mx-1 red-text" (click)="_eliminar()">
+      <i class="material-icons">delete</i>
+    </a>
+  </div>
+  <div *ngIf="model.accion==='I' || model.accion==='U'" class="col s2 center-align">
+    <a href="javacript:;" class="mx-1" (click)="_insertarModificar()">
+      <i class="material-icons">check</i>
+    </a>
+    <a href="javascript:;" class="mx-1" (click)="_cancelar()">
+      <i class="material-icons">cancel</i>
+    </a>
+  </div>
+</div>

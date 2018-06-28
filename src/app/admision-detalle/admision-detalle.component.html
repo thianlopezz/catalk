@@ -1,0 +1,61 @@
+<div class="container">
+  <h2>Admisiones</h2>
+  <div class="row">
+    <div *ngIf="estado!=='editar'" class="col s12">
+      <div class="card">
+        <div class="card-content">
+          <h3>{{admision.tipoAdmision}}</h3>
+          <p>{{admision.descripcion}}</p>
+          <p>{{admision.feInicio | date:"dd/MM/yyyy"}}</p>
+          <p>{{admision.feFin | date:"dd/MM/yyyy"}}</p>
+          <p>{{admision.valor | currency}}</p>
+        </div>
+      </div>
+    </div>
+    <div *ngIf="estado==='editar'" class="col s12 m8 offset-m2">
+      <div class="card">
+        <div class="card-content">
+          <app-form-admisiones [model]="admision" (success)="onSuccessForm($event)" (cancelar)="onCancelarForm($event)"></app-form-admisiones>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col s12">
+      <ul class="tabs">
+        <li class="tab col s6">
+          <a class="active" href="#detalles">Detalles</a>
+        </li>
+        <li class="tab col s6">
+          <a href="#requisitos">Requisitos</a>
+        </li>
+      </ul>
+      <div id="detalles" class="col s12">
+        <app-card-detalle *ngFor="let detalle of detalles; let i = index" [index]="i" [model]="detalle" (insertar)="onInsertarDetalle($event)"
+          (editar)="onEditarDetalle($event)" (modificar)="onModificarDetalle($event)" (cancelar)="onCancelarDetalle($event)"
+          (arriba)="onArribaDetalle($event)" (abajo)="onAbajoDetalle($event)"></app-card-detalle>
+        <div class="card-panel row valign-wrapper p-1">
+          <div class="col s12 center-align">
+            <a href="javascript:;" (click)="addNuevoDetalle()">
+              Nuevo detalle
+              <i class="material-icons">note_add</i>
+            </a>
+          </div>
+        </div>
+      </div>
+      <div id="requisitos" class="col s12">
+        <app-card-detalle *ngFor="let requisito of requisitos; let i = index" [index]="i" [model]="requisito" (insertar)="onInsertarRequisito($event)"
+          (editar)="onEditarRequisito($event)" (modificar)="onModificarRequisito($event)" (cancelar)="onCancelarRequisito($event)" (arriba)="onArribaRequisito($event)"
+          (abajo)="onAbajoRequisito($event)"></app-card-detalle>
+        <div class="card-panel row valign-wrapper p-1">
+          <div class="col s12 center-align">
+            <a href="javascript:;" (click)="addNuevoRequisito()">
+              Nuevo requisito
+              <i class="material-icons">note_add</i>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
