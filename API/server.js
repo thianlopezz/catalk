@@ -24,7 +24,7 @@ app.use('/private', private);
 // app.use(forceSSL());
 
 app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, '../dist/index.html'));
+  res.sendFile(path.join(__dirname, '../dist/catalk/index.html'));
 });
 
 const port = process.env.PORT || '9001';
