@@ -136,6 +136,20 @@ export class AdmisionDetalleComponent implements OnInit, AfterViewInit {
     this.guardarAdmision();
   }
 
+  onAbajoDetalle(detalle) {
+
+    if (detalle.index === this.detalles.length - 1) {
+      return;
+    } else if (detalle.index < this.detalles.length - 1) {
+
+      const elementoAbajo = this.admision.requisitos[detalle.index + 1];
+      this.admision.detalles[detalle.index + 1] = detalle.descripcion;
+      this.admision.detalles[detalle.index] = elementoAbajo;
+    }
+
+    this.guardarAdmision();
+  }
+
   onAbajoRequisito(requisito) {
 
     if (requisito.index === this.requisitos.length - 1) {
