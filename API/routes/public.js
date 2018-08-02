@@ -5,6 +5,7 @@ let jwt = require('jsonwebtoken');
 const secret = 'catalk';
 
 const UsuarioDAO = require('../models/usuario/UsuarioDAO');
+const RootController = require('../controllers/RootController');
 
 router.get('/', (req, res) => {
 
@@ -13,11 +14,8 @@ router.get('/', (req, res) => {
 
 router.post('/router', (req, res) => {
 
-  console.log('LLego!');
-  console.log(req.body);
-  res.send({
-    "fulfillmentText": "This is a text response"
-  });
+  // console.log(req.body);
+  RootController.getAll(req.body, res);
 });
 
 router.post('/login', (req, res) => {

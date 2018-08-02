@@ -1,102 +1,84 @@
-Admisiones = require('./Admisiones');
+const Admisiones = require('./Admisiones');
+const ObjectId = require('mongoose').Types.ObjectId;
 
 function AdmisionesDAO() {
 
-    this.getAll = function (callback) {
+    this.getAll = function () {
 
-        Admisiones.find({}, function (error, result) {
-            if (error) {
-                callback(new Error(error));
+        return new Promise((resolve, reject) => {
+
+            Admisiones.find({ estado: 'A' })
+                .then(tipoAdmisiones => resolve(tipoAdmisiones))
+                .catch(error => {
+                    console.log('Error al obtener TIPOS DE ADMISIONES: ' + error.message);
+                    reject(error);
+                });
+        });
+    };
+
+    this.getById = function (idAdmision) {
+
+        return new Promise((resolve, reject) => {
+
+            Admisiones.findById(ObjectId(idAdmision))
+                .then(result => resolve(result))
+                .catch(error => reject(error));
+        });
+    }
+
+    this.mantenimiento = function (accion, admision) {
+
+        return new Promise((resolve, reject) => {
+
+            if (accion === 'I') {
+
+                insertar(admision)
+                    .then(result => resolve(result))
+                    .catch(error => reject(error));
+            } else if (accion === 'U') {
+
+                actualizar(admision)
+                    .then(result => resolve(result))
+                    .catch(error => reject(error));
+            } else if (accion === 'D') {
+
+                desactivar(admision)
+                    .then(result => resolve(result))
+                    .catch(error => reject(error));
             } else {
-                callback(null, result);
+
+                reject(new Error('No se encontró ninguna acción.'));
             }
         });
     }
 
-    this.getById = function (idAdmision, callback) {
+    function insertar(model) {
 
-        Admisiones.findById(idAdmision, function (error, result) {
-            if (error) {
-                callback(new Error(error));
-            } else {
-                callback(null, result);
-            }
+        return new Promise((resolve, reject) => {
+
+            const admision = new Admisiones(model);
+
+            admision.save()
+                .then(result => resolve(result))
+                .catch(error => reject(error));
         });
     }
 
-    this.mantenimiento = function (accion, admision, callback) {
-        
-        if (accion === 'I') {
+    function actualizar(model) {
 
-            insertar(admision, function (error, result) {
-                if (error) {
-                    callback(error);
-                } else {
-                    callback(null, result);
-                }
-            });
-        } else if (accion === 'U') {
+        return new Promise((resolve, reject) => {
 
-            actualizar(admision, function (error, result) {
-                if (error) {
-                    callback(error);
-                } else {
-                    callback(null, result);
-                }
-            });
-        } else if (accion === 'D') {
-
-            desactivar(admision, function (error, result) {
-                if (error) {
-                    callback(error);
-                } else {
-                    callback(null, result);
-                }
-            });
-        } else {
-
-            callback(new Error('No se encontró ninguna acción.'));
-        }
-    }
-
-    function insertar(model, callback) {
-
-        const admision = new Admisiones(model);
-
-        admision.save(function (error, result) {
-
-            if (error) {
-                callback(error);
-            } else {
-                callback(null, result);
-            }
+            Admisiones.findByIdAndUpdate(model._id, model)
+                .then(result => resolve(result))
+                .catch(error => reject(error));
         });
-    }
-
-    function actualizar(model, callback) {
-
-        Admisiones.findByIdAndUpdate(model._id, model,
-            function (error, result) {
-
-                if (error) {
-                    callback(error);
-                } else {
-                    callback(null, result);
-                }
-            });
     }
 
     function desactivar(model, callback) {
 
-        Admisiones.findByIdAndUpdate(model._id, { estado: 'I' },
-            function (error, result) {
-
-                if (error) {
-                    callback(error);
-                } else {
-                    callback(null, result);
-                }
-            });
+        Admisiones.findByIdAndUpdate(model._id, { estado: 'I' })
+            .then(result => resolve(result))
+            .catch(error => reject(error));
     }
 }
 

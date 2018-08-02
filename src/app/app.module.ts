@@ -20,6 +20,8 @@ import { FormAdmisionesComponent } from './admisiones/form-admisiones/form-admis
 import { AdmisionesService } from './admisiones/admisiones.service';
 import { AdmisionDetalleComponent } from './admision-detalle/admision-detalle.component';
 import { CardDetalleComponent } from './admision-detalle/card-detalle/card-detalle.component';
+import { CardAdmisionDetalleComponent } from './admision-detalle/card-admision-detalle/card-admision-detalle.component';
+import { AdmisionDetalleExComponent } from './publico/admision-detalle-ex/admision-detalle-ex.component';
 
 @NgModule({
   declarations: [
@@ -34,7 +36,9 @@ import { CardDetalleComponent } from './admision-detalle/card-detalle/card-detal
     SpinnerComponent,
     FormAdmisionesComponent,
     AdmisionDetalleComponent,
-    CardDetalleComponent
+    CardDetalleComponent,
+    CardAdmisionDetalleComponent,
+    AdmisionDetalleExComponent
   ],
   imports: [
     BrowserModule,

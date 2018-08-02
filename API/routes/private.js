@@ -42,38 +42,30 @@ router.use(function (req, res, next) {
 
 router.get('/admisiones', (req, res) => {
 
-  AdmisionesDAO.getAll(function (error, admisiones) {
-
-    if (error) {
-      res.send({ success: false, mensaje: error.message, error });
-    } else {
-      res.json({ success: true, data: admisiones });
-    }
-  });
+  AdmisionesDAO.getAll()
+    .then(tipoAdmisiones => res.json({ success: true, data: tipoAdmisiones }))
+    .catch(error => res.send({ success: false, mensaje: error.message, error }));
 });
 
 router.get('/admisiones/:idAdmision', (req, res) => {
 
-  AdmisionesDAO.getById(req.params.idAdmision, function (error, admision) {
+  AdmisionesDAO.getById(req.params.idAdmision)
+    .then(admision => {
 
-    if (error) {
-      res.send({ success: false, mensaje: error.message, error });
-    } else {
-      res.json({ success: true, data: admision });
-    }
-  });
+      if (admision) {
+        res.json({ success: true, data: admision });
+      } else {
+        res.status(404).send({ success: false, mensaje: 'Admisión no encontrada.' })
+      }
+    })
+    .catch(error => res.send({ success: false, mensaje: error.message, error }))
 });
 
 router.post('/admisiones/:accion', (req, res) => {
 
-  AdmisionesDAO.mantenimiento(req.params.accion, req.body, function (error, admisiones) {
-
-    if (error) {
-      res.send({ success: false, mensaje: error.message, error });
-    } else {
-      res.json({ success: true, data: admisiones });
-    }
-  });
+  AdmisionesDAO.mantenimiento(req.params.accion, req.body)
+    .then(admision => res.json({ success: true, data: admision }))
+    .catch(error => res.send({ success: false, mensaje: error.message, error }))
 });
 
 module.exports = router;

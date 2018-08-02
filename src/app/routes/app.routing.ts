@@ -4,6 +4,7 @@ import { LoginComponent } from '../login/login.component';
 import { DashboardComponent } from '../dashboard/dashboard.component';
 import { AdmisionesComponent } from '../admisiones/admisiones.component';
 import { AdmisionDetalleComponent } from '../admision-detalle/admision-detalle.component';
+import { AdmisionDetalleExComponent } from '../publico/admision-detalle-ex/admision-detalle-ex.component';
 
 const appRoutes: Routes = [
     { path: '', component: HomeComponent },
@@ -11,6 +12,7 @@ const appRoutes: Routes = [
     { path: 'ds', component: DashboardComponent },
     { path: 'admisiones', component: AdmisionesComponent },
     { path: 'admisiones/:id', component: AdmisionDetalleComponent },
+    { path: 'admisiones/ex/:id', component: AdmisionDetalleExComponent },
 
     // { path: 'home', component: HomeComponent, canActivate: [RouteActivatorService] },
 

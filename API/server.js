@@ -16,7 +16,7 @@ const private = require('./routes/private');
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
-app.use(express.static(path.join(__dirname, '../dist/catalk')));
+app.use(express.static(path.join(__dirname, '../dist')));
 
 app.use('/api', public);
 app.use('/private', private);
@@ -24,7 +24,7 @@ app.use('/private', private);
 // app.use(forceSSL());
 
 app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, '../dist/catalk/index.html'));
+  res.sendFile(path.join(__dirname, '../dist/index.html'));
 });
 
 const port = process.env.PORT || '9001';

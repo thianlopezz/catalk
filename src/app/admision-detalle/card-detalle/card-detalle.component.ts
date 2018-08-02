@@ -13,6 +13,10 @@ export class CardDetalleComponent implements OnInit, OnChanges {
   @Input() index: number;
   @Input() model;
 
+  // BANDERA PARA DECIR QUE SOLO ES INFORMATIVO
+  // NO SE PUEDE EDITAR
+  @Input() esInfo = false;
+
   @Output() insertar = new EventEmitter<any>();
   @Output() modificar = new EventEmitter<any>();
   @Output() editar = new EventEmitter<any>();
@@ -45,6 +49,10 @@ export class CardDetalleComponent implements OnInit, OnChanges {
   _editar() {
 
     this.editar.next({ index: this.index, descripcion: this.model.descripcion });
+
+    setTimeout(() => {
+      M.updateTextFields();
+    }, 100);
   }
 
   _cancelar() {

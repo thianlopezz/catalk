@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <title>información de admisiones</title>
+  <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN"
+    crossorigin="anonymous">
+</head>
+
+<body>
+  <div class="container">
+    <section class="cabecera">
+      <table>
+        <tr>
+          <td>
+            <img src="https://www.serviyaec.com/assets/imgs/servico1.png" width="75px" alt="logo-serviyaec">
+          </td>
+          <td class="titulo" style="width: 100%;text-align: right;">
+            <h4 class="titulo">Catalk informa</h4>
+          </td>
+        </tr>
+      </table>
+    </section>
+    <section class="cuerpo">
+      <br>
+      <br>
+      <br>
+      <table>
+        <tr>
+          <td>
+            <p>Hola, en el presente correo te proporcionamos toda la información respecto a las admisiones de nuestra carrera.</p>
+            <p>Cualquier duda no olvides comunicarte a <a href="mailto:{{correoAdmin}}?Subject=información" target="_top">{{correoAdmin}}</a>.</p>
+          </td>
+        </tr>
+      </table>
+      {{{infoAdmision}}}
+      <hr>
+      <br>
+    </section>
+    <br>
+    <section class="condiciones">
+      <p>No responda este correo, cualquier duda o información escriba a nuestro equipo de soporte.
+        <a href="mailto:{{correoAdmin}}?Subject=información" target="_top">{{correoAdmin}}</a>.
+      </p>
+    </section>
+    <section class="pie">
+      <table>
+        <tr>
+          <td class="leyenda">
+            <p>Todos los derechos reservados</p>
+          </td>
+          <td class="social">
+            <a href="https://www.facebook.com/serviyaec">
+              <img src="https://correo-generico.herokuapp.com/fb.png" alt="fb">
+            </a>
+            <a href="https://twitter.com/serviyaec">
+              <img src="https://correo-generico.herokuapp.com/tw.png" alt="tw">
+            </a>
+            <a href="https://www.instagram.com/serviyaec">
+              <img src="https://correo-generico.herokuapp.com/ig.png" alt="tw">
+            </a>
+            <a href="https://www.linkedin.com/in/thianlopezz/">
+              <img src="https://correo-generico.herokuapp.com/in.png" alt="in">
+            </a>
+          </td>
+        </tr>
+      </table>
+    </section>
+  </div>
+</body>
+
+</html>

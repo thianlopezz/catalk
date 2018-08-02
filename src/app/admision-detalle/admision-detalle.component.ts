@@ -12,6 +12,7 @@ declare var M: any;
 })
 export class AdmisionDetalleComponent implements OnInit, AfterViewInit {
 
+
   estado;
   loadingAdmision;
 

@@ -1,0 +1,35 @@
+<div class="card">
+  <div class="card-content">
+    <h3>{{admision.tipoAdmision}}</h3>
+    <div class="row">
+      <div class="col m12">
+        <p>{{admision.descripcion}}</p>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col m6 s12">
+        <label for="feIni">
+          <strong>Fecha de inicio:</strong>
+        </label>
+        <p id="feIni" name="feIni">{{admision.feInicio | date:"dd/MM/yyyy"}}</p>
+      </div>
+      <div class="col m6 s12">
+        <label for="feFin">
+          <strong>Fecha de finalización:</strong>
+        </label>
+        <p id="feFin" name="feFin">{{admision.feFin | date:"dd/MM/yyyy"}}</p>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col m12">
+        <label for="valor">
+          <strong>Valor:</strong>
+        </label>
+        &nbsp;
+        <div id="valor" name="valor" class="chip">
+          {{admision.valor | currency}}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
