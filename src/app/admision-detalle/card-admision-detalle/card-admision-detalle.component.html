@@ -1,6 +1,17 @@
-<div class="card">
+<div class="card horizontal">
+  <div class="card-header">
+    <span class="card-title">{{admision.tipoAdmision}}</span>
+    <div [hidden]="!botonera" class="botonera">
+      <a target="_blank" [href]="'/admisiones/ex/' + admision._id" class="btn tooltipped mx-1" data-position="bottom" data-tooltip="Vista previa">
+        <i class="material-icons">remove_red_eye</i>
+      </a>
+      <a [routerLink]="['/admisiones', admision._id, 'edit']" class="btn tooltipped mx-1" data-position="bottom" data-tooltip="Editar">
+        <i class="material-icons">edit</i>
+      </a>
+    </div>
+  </div>
   <div class="card-content">
-    <h3>{{admision.tipoAdmision}}</h3>
+    <!-- <h3>{{admision.tipoAdmision}}</h3> -->
     <div class="row">
       <div class="col m12">
         <p>{{admision.descripcion}}</p>

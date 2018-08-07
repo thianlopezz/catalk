@@ -19,9 +19,28 @@ import { SpinnerComponent } from './common/spinner/spinner.component';
 import { FormAdmisionesComponent } from './admisiones/form-admisiones/form-admisiones.component';
 import { AdmisionesService } from './admisiones/admisiones.service';
 import { AdmisionDetalleComponent } from './admision-detalle/admision-detalle.component';
-import { CardDetalleComponent } from './admision-detalle/card-detalle/card-detalle.component';
 import { CardAdmisionDetalleComponent } from './admision-detalle/card-admision-detalle/card-admision-detalle.component';
-import { AdmisionDetalleExComponent } from './publico/admision-detalle-ex/admision-detalle-ex.component';
+import { AdmisionDetalleExComponent } from './public/admision-detalle-ex/admision-detalle-ex.component';
+import { SolicitudesComponent } from './solicitudes/solicitudes.component';
+import { ListSolicitudesComponent } from './solicitudes/list-solicitudes/list-solicitudes.component';
+import { CardSolicitudComponent } from './solicitudes/list-solicitudes/card-solicitud/card-solicitud.component';
+import { FormSolicitudesComponent } from './solicitudes/form-solicitudes/form-solicitudes.component';
+import { SolicitudDetalleComponent } from './solicitud-detalle/solicitud-detalle.component';
+import { CardAdmisionDetalleItemComponent } from './admision-detalle/card-admision-detalle-item/card-admision-detalle-item.component';
+import { CardSolicitudDetalleComponent } from './solicitud-detalle/card-solicitud-detalle/card-solicitud-detalle.component';
+import { CardSolicitudDetalleItemComponent } from './solicitud-detalle/card-solicitud-detalle-item/card-solicitud-detalle-item.component';
+import { SolicitudDetalleExComponent } from './public/solicitud-detalle-ex/solicitud-detalle-ex.component';
+import { TramitesComponent } from './tramites/tramites.component';
+import { FormTramitesComponent } from './tramites/form-tramites/form-tramites.component';
+import { ListTramitesComponent } from './tramites/list-tramites/list-tramites.component';
+import { TramiteDetalleComponent } from './tramite-detalle/tramite-detalle.component';
+import { CardTramiteDetalleComponent } from './tramite-detalle/card-tramite-detalle/card-tramite-detalle.component';
+import { CardTramiteDetalleItemComponent } from './tramite-detalle/card-tramite-detalle-item/card-tramite-detalle-item.component';
+import { TramiteDetalleExComponent } from './public/tramite-detalle-ex/tramite-detalle-ex.component';
+import { CardTramiteComponent } from './tramites/list-tramites/card-tramite/card-tramite.component';
+import { ModalConfirmaComponent } from './common/modal-confirma/modal-confirma.component';
+import { ParametrosComponent } from './parametros/parametros.component';
+import { FormParametrosComponent } from './parametros/form-parametros/form-parametros.component';
 
 @NgModule({
   declarations: [
@@ -36,9 +55,28 @@ import { AdmisionDetalleExComponent } from './publico/admision-detalle-ex/admisi
     SpinnerComponent,
     FormAdmisionesComponent,
     AdmisionDetalleComponent,
-    CardDetalleComponent,
+    CardAdmisionDetalleItemComponent,
     CardAdmisionDetalleComponent,
-    AdmisionDetalleExComponent
+    AdmisionDetalleExComponent,
+    SolicitudesComponent,
+    ListSolicitudesComponent,
+    CardSolicitudComponent,
+    FormSolicitudesComponent,
+    SolicitudDetalleComponent,
+    CardSolicitudDetalleComponent,
+    CardSolicitudDetalleItemComponent,
+    SolicitudDetalleExComponent,
+    TramitesComponent,
+    FormTramitesComponent,
+    ListTramitesComponent,
+    CardTramiteComponent,
+    TramiteDetalleComponent,
+    CardTramiteDetalleComponent,
+    CardTramiteDetalleItemComponent,
+    TramiteDetalleExComponent,
+    ModalConfirmaComponent,
+    ParametrosComponent,
+    FormParametrosComponent
   ],
   imports: [
     BrowserModule,

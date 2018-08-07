@@ -1,4 +1,4 @@
-// const URL_BASE = 'http://localhost:9001/';
+// const URL_BASE = 'http://200.69.184.189:9001/';
 const URL_BASE = 'https://catalk.herokuapp.com/';
 
 const moment = require('moment');
@@ -29,16 +29,16 @@ function AdmisionesController() {
 
         AdmisionesDAO.getAll()
             .then(tipoAdmisiones => {
-                
+
                 let infoAdmision = '';
 
                 tipoAdmisiones.forEach(admision => {
-                    
-                    infoAdmision = infoAdmision + 
-                    `
-                <h1 style="text-align: center; background-color: #ee6e7359; color: black; padding: .7rem;">
+
+                    infoAdmision = infoAdmision +
+                        `
+                <h3 style="text-align: center; color: #a74f52; padding: .7rem;">
                     ${admision.tipoAdmision}
-                </h1>
+                </h3>
                 <p>${admision.descripcion}</p>
                 <table style="width: 100%;">
                     <tr>
@@ -69,26 +69,26 @@ function AdmisionesController() {
 
                     // ARMO DETALLES
                     let detalles = `
-                <h2>Detalles</h2>
+                <h4 style="color: #676767;">Detalles</h4>
                     <ul>
                 `;
 
                     admision.detalles.forEach(detalle => {
                         detalles = detalles
-                            + `<li>${detalle}</li>`
+                            + `<li>${detalle.descripcion}</li>`
                     });
 
                     detalles = detalles + '</ul>';
 
                     // ARMO REQUISITOS
                     let requisitos = `
-                <h2>Requisitos</h2>
+                <h4 style="color: #676767;">Requisitos</h4>
                     <ul>
                 `;
 
                     admision.requisitos.forEach(requisito => {
                         requisitos = requisitos
-                            + `<li>${requisito}</li>`
+                            + `<li>${requisito.descripcion}</li>`
                     });
 
                     requisitos = requisitos + '</ul>';
@@ -98,11 +98,15 @@ function AdmisionesController() {
 
                 });
 
-                // DEFINIR RESERVADOS
-                console.log('OJOOO DEFINIR TOKENS');
-                let claves = '';
-                claves = claves + 'infoAdmision&' + infoAdmision + '|';
-                claves = claves + 'correoAdmin&' + 'ingenieria.ucsg@gmail.com' + '|';
+                // // DEFINIR RESERVADOS
+                // console.log('OJOOO DEFINIR TOKENS');
+                // let claves = '';
+                // claves = claves + 'infoAdmision&' + infoAdmision + '|';
+                // claves = claves + 'correoAdmin&' + 'ingenieria.ucsg@gmail.com' + '|';
+
+                const claves = {
+                    infoAdmision
+                }
 
                 CorreoController.enviar('Información de admisiones', correo, './plantillas_correo/infoadmisiones', claves)
                     .then(() => {
@@ -143,11 +147,11 @@ function AdmisionesController() {
     function getInfoAdmision(key, res) {
 
         // AQUI SE CAMBIA POR KEY UNICO DESDE LA BD
-        if (key === 'examen.admision') {
-            key = '5b3424ca66fc60d3c466b655';
-        } else if (key === 'curso.nivelacion') {
-            key = '5b353c33d4738f21ace9c131';
-        }
+        // if (key === 'examen.admision') {
+        //     key = '5b3424ca66fc60d3c466b655';
+        // } else if (key === 'curso.nivelacion') {
+        //     key = '5b353c33d4738f21ace9c131';
+        // }
 
         getDetalleAdmision(key, res);
     }
@@ -213,7 +217,7 @@ function AdmisionesController() {
                     card: {
                         title: admision.tipoAdmision,
                         subtitle: admision.descripcion,
-                        // "imageUri": "https://assistant.google.com/static/images/molecule/Molecule-Formation-stop.png",
+                        imageUri: URL_BASE + 'assets/images/admisiones.png',
                         buttons: [
                             {
                                 text: "Saber más",
@@ -278,11 +282,11 @@ function AdmisionesController() {
         return respuestas;
     }
 
-    function getDetalleAdmision(idAdmision, res) {
+    function getDetalleAdmision(key, res) {
 
         let respuestas = [];
 
-        AdmisionesDAO.getById(idAdmision)
+        AdmisionesDAO.getByKey(key)
             .then(admision => {
 
                 respuestas.push({
@@ -337,13 +341,41 @@ function AdmisionesController() {
 
                 for (let i = 0; i < detallesLength; i++) {
 
-                    respuestas.push({
-                        text: {
-                            text: [
-                                admision.detalles[i]
-                            ],
-                        },
-                    });
+                    let text;
+
+                    // TIPO DESCRIPCION
+                    if (!admision.detalles[i].idSolicitud && !admision.detalles[i].link) {
+
+                        text = {
+                            text: {
+                                text: [
+                                    admision.detalles[i].descripcion
+                                ],
+                            }
+                        };
+                    } else if (admision.detalles[i].link) { // TIPO LINK
+
+                        text = {
+                            text: {
+                                text: [
+                                    admision.detalles[i].descripcion,
+                                    admision.detalles[i].link
+                                ],
+                            }
+                        };
+                    } else if (admision.detalles[i].idSolicitud) { // TIPO MODELO SOLICITUD
+
+                        text = {
+                            text: {
+                                text: [
+                                    admision.detalles[i].descripcion,
+                                    URL_BASE + 'solicitudes/ex/' + admision.detalles[i].idSolicitud
+                                ],
+                            }
+                        };
+                    }
+
+                    respuestas.push(text);
                 }
 
                 respuestas.push({

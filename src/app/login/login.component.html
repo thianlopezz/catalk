@@ -1,17 +1,23 @@
 <br>
 <div class="container principal">
   <div class="row">
-    <div class="col s12 m12 l6">
+    <!-- <div class="col s12 m12 l6">
       <div class="row center-align">
         <h5>Inicia sesión</h5>
         <i class="large material-icons">person_pin</i>
       </div>
       <p class="center-align">Inicia sesión y accede a todos tus contratos guardados.</p>
-    </div>
-    <div class="col s12 m12 l6">
+    </div> -->
+    <div class="col s12 m12 l6 offset-l3">
+      <h4 class="center-align">
+        <i class="large material-icons">account_circle</i>
+      </h4>
       <div class="card">
-        <div class="card-content">
+        <div class="card-header">
           <span class="card-title">Login</span>
+        </div>
+        <div class="card-content">
+          <!-- <span class="card-title">Login</span> -->
           <form id="form" name="form" (ngSubmit)="login(f)" #f="ngForm">
             <div class="row">
               <div class="input-field col s12">
@@ -27,13 +33,10 @@
             </div>
           </form>
         </div>
-        <div class="card-action">
+        <div class="card-action center-align">
           <button class="btn waves-effect waves-light" form="form" type="submit">
             Iniciar Sesión
-            <i class="material-icons right">send</i>
           </button>
-          <!-- &nbsp;
-          <a href="#">Olvidé mi contraseña</a> -->
         </div>
       </div>
     </div>

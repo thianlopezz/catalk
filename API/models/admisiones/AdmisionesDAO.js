@@ -1,4 +1,5 @@
 const Admisiones = require('./Admisiones');
+const ModeloSolicitudesDAO = require('../modelo_solicitudes/ModeloSolicitudesDAO');
 const ObjectId = require('mongoose').Types.ObjectId;
 
 function AdmisionesDAO() {
@@ -21,7 +22,78 @@ function AdmisionesDAO() {
         return new Promise((resolve, reject) => {
 
             Admisiones.findById(ObjectId(idAdmision))
-                .then(result => resolve(result))
+                .then(result => {
+
+                    result = result.toJSON();
+                    // console.log(result);
+
+                    // OBTENGO LOS MODELOS DE SOLICITUDES
+                    ModeloSolicitudesDAO.getAll()
+                        .then(modelos => {
+
+                            modelos = Object.assign([], modelos);
+                            // console.log(modelos);
+
+                            for (let i = 0; i < result.detalles.length; i++) {
+
+                                const modelo = modelos.find(x => '' + x._id === '' + result.detalles[i].idSolicitud);
+                                result.detalles[i].solicitud = modelo;
+                            }
+
+                            for (let i = 0; i < result.requisitos.length; i++) {
+
+                                const modelo = modelos.find(x => '' + x._id === '' + result.requisitos[i].idSolicitud);
+                                result.requisitos[i].solicitud = modelo;
+                            }
+
+                            resolve(result);
+                        })
+                        .catch(error => {
+                            console.log(error);
+                            resolve(result);
+                        });
+                })
+                .catch(error => reject(error));
+        });
+    }
+
+    this.getByKey = function (key) {
+
+        return new Promise((resolve, reject) => {
+
+            Admisiones.find({ keyDialogflow: key })
+                .then(result => {
+
+                    // result = result.toJSON();
+                    result = result[0];
+                    // console.log(result);
+
+                    // OBTENGO LOS MODELOS DE SOLICITUDES
+                    ModeloSolicitudesDAO.getAll()
+                        .then(modelos => {
+
+                            modelos = Object.assign([], modelos);
+                            // console.log(modelos);
+
+                            for (let i = 0; i < result.detalles.length; i++) {
+
+                                const modelo = modelos.find(x => '' + x._id === '' + result.detalles[i].idSolicitud);
+                                result.detalles[i].solicitud = modelo;
+                            }
+
+                            for (let i = 0; i < result.requisitos.length; i++) {
+
+                                const modelo = modelos.find(x => '' + x._id === '' + result.requisitos[i].idSolicitud);
+                                result.requisitos[i].solicitud = modelo;
+                            }
+
+                            resolve(result);
+                        })
+                        .catch(error => {
+                            console.log(error);
+                            resolve(result);
+                        });
+                })
                 .catch(error => reject(error));
         });
     }
@@ -74,11 +146,13 @@ function AdmisionesDAO() {
         });
     }
 
-    function desactivar(model, callback) {
+    function desactivar(model) {
 
-        Admisiones.findByIdAndUpdate(model._id, { estado: 'I' })
-            .then(result => resolve(result))
-            .catch(error => reject(error));
+        return new Promise((resolve, reject)=>{
+            Admisiones.findByIdAndUpdate(model._id, { estado: 'I' })
+                .then(result => resolve(result))
+                .catch(error => reject(error));
+        });        
     }
 }
 

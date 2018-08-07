@@ -1,0 +1,16 @@
+<div class="row">
+  <div *ngFor="let solicitud of solicitudes" class="col s12 m6">
+    <app-card-solicitud [solicitud]="solicitud" (detalle)="onDetalle($event)" (editar)="onEditar($event)" (eliminar)="onEliminar($event)"></app-card-solicitud>
+  </div>
+  <div *ngIf="!solicitudes || solicitudes.length===0 && !loading" class="col s12 center-align">
+    <div class="card">
+      <div class="card-content">
+        <span class="card-title">
+          <i class="material-icons">reorder</i>
+        </span>
+        <p>No existen modelos de solicitudes.</p>
+      </div>
+    </div>
+  </div>
+  <app-spinner *ngIf="loading"></app-spinner>
+</div>

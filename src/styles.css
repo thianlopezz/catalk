@@ -1,4 +1,29 @@
 
+.card-header {
+  padding: 1rem;
+}
+
+.horizontal {
+  display: inline;
+}
+
+.horizontal .card-header {
+  float: left;
+  width: 35%;  
+  display: flex;
+  flex-direction: column;
+}
+
+.horizontal .card-content {
+  float: left;
+  width: 65%;
+}
+
+.horizontal .card-header .botonera {  
+  margin-top: auto;
+}
+
+/* HELPERS BOOTSTRAP */
 .w-25 {
   width: 25% !important;
 }

@@ -1,0 +1,87 @@
+<div class="card-panel row valign-wrapper p-0">
+<!-- ES INFO -->
+  <!-- TIPO DESCRIPCION -->
+  <div *ngIf="esInfo && !model.link && !model.idSolicitud" class="col s12">
+    <p>{{(index + 1) + '. ' + model.descripcion}}</p>
+  </div>
+  <!-- TIPO MODELO -->
+  <div *ngIf="esInfo && model.idSolicitud" class="col s12">
+    <p>
+      {{(index + 1) + '. ' + model.descripcion}}
+      <a target="_blank" [href]="'/solicitudes/ex/' + model.idSolicitud">
+        <i class="material-icons right">attach_file</i>
+      </a>
+    </p>
+  </div>
+  <!-- TIPO LINK -->
+  <div *ngIf="esInfo && model.link" class="col s12">
+    <p>
+      {{(index + 1) + '. ' + model.descripcion}}
+      <a target="_blank" [href]="model.link">
+        <i class="material-icons right">link</i>
+      </a>
+    </p>
+  </div>
+  
+  <!-- TIPO DESCRIPCION -->
+  <div class="col s9" *ngIf="!esInfo && !model.accion && !model.link && !model.idSolicitud">
+    <p>{{(index + 1) + '. ' + model.descripcion}}</p>
+  </div>
+  <!-- TIPO MODELO -->
+  <div class="col s9" *ngIf="!esInfo && !model.accion && model.idSolicitud">
+    <p>
+      {{(index + 1) + '. ' + model.descripcion}}
+      <a target="_blank" [href]="'/solicitudes/ex/' + model.idSolicitud">
+        <i class="material-icons right">attach_file</i>
+      </a>
+    </p>
+  </div>
+  <!-- TIPO LINK -->
+  <div class="col s9" *ngIf="!esInfo && !model.accion && model.link">
+    <p>
+      {{(index + 1) + '. ' + model.descripcion}}
+      <a target="_blank" [href]="model.link">
+        <i class="material-icons right">link</i>
+      </a>
+    </p>
+  </div>
+  <div [hidden]="!(!esInfo && model.accion==='I' || model.accion==='U')" class="col s10">
+    <div class="input-field" [ngClass]="{'col s12': model.modo === 'DESCRIPCION', 'col s12 m7': model.modo !== 'DESCRIPCION' }">
+      <textarea id="descripcion" name="descripcion" class="materialize-textarea" [(ngModel)]="model.descripcion" #descripcion="ngModel"></textarea>
+      <label for="descripcion">Descripción</label>
+    </div>
+    <div [hidden]="model.modo!=='LINK'" class="input-field col s12 m5">
+      <input id="link" name="link" type="text" [(ngModel)]="model.link" #link="ngModel">
+      <label for="link">Url</label>
+    </div>
+    <div [hidden]="model.modo!=='MODELO'" class="input-field col s12 m5">
+      <select [id]="'select_' + modo + index">
+        <option value="" disabled selected>Elige el modelo de solicitud</option>
+        <option *ngFor="let solicitud of solicitudes" [value]="solicitud._id">{{solicitud.solicitud}}</option>
+      </select>
+      <label>Solicitud</label>
+    </div>
+  </div>
+  <div *ngIf="!esInfo && !model.accion" class="col s3 center-align">
+    <a href="javacript:;" class="mx-1" (click)="_editar()">
+      <i class="material-icons">edit</i>
+    </a>
+    <a href="javacript:;" class="ml-1" (click)="_arriba()">
+      <i class="material-icons">expand_less</i>
+    </a>
+    <a href="javacript:;" class="mr-1" (click)="_abajo()">
+      <i class="material-icons">expand_more</i>
+    </a>
+    <a href="javacript:;" class="mx-1 red-text" (click)="_eliminar()">
+      <i class="material-icons">delete</i>
+    </a>
+  </div>
+  <div *ngIf="!esInfo && model.accion==='I' || model.accion==='U'" class="col s2 center-align">
+    <a href="javacript:;" class="mx-1" (click)="_insertarModificar()">
+      <i class="material-icons">check</i>
+    </a>
+    <a href="javascript:;" class="mx-1" (click)="_cancelar()">
+      <i class="material-icons">cancel</i>
+    </a>
+  </div>
+</div>

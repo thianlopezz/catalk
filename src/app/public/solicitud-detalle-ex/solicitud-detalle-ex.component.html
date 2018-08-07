@@ -1,0 +1,30 @@
+<div class="container">
+  <h2>Modelo de solicitud</h2>
+  <div class="row">
+    <div class="col s12">
+      <app-card-solicitud-detalle [solicitud]="solicitud"></app-card-solicitud-detalle>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col s12">
+      <ul class="tabs">
+        <li class="tab col s12">
+          <a class="active" href="#detalles">Detalles</a>
+        </li>
+      </ul>
+      <div id="detalles" class="col s12">
+        <app-card-solicitud-detalle-item *ngFor="let detalle of detalles; let i = index" [esInfo]="true" [index]="i" [model]="detalle"></app-card-solicitud-detalle-item>
+        <div *ngIf="!loading && detalles.length==0" class="col s12 center-align">
+          <div class="card">
+            <div class="card-content">
+              <span class="card-title">
+                <i class="material-icons">reorder</i>
+              </span>
+              <p>No existen detalles.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

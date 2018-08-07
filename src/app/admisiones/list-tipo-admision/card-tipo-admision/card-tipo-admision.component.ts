@@ -12,7 +12,7 @@ declare var jQuery: any;
       </div>
       <div class="card-action">
         <a href="javascript:;" class="btn tooltipped mx-1" data-position="bottom" data-tooltip="Detalles" (click)="_detalle()">
-          <i class="material-icons">remove_red_eye</i>
+          <i class="material-icons">list_alt</i>
         </a>
         <a href="javascript:;" class="btn tooltipped mx-1" data-position="bottom" data-tooltip="Editar" (click)="_editar()">
           <i class="material-icons">edit</i>

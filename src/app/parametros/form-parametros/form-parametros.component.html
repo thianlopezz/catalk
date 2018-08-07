@@ -1,0 +1,61 @@
+<form name="form" (ngSubmit)="guardar(f)" #f="ngForm">
+  <div class="row">
+    <h6>Contacto</h6>
+    <div class="divider mb-3"></div>
+    <div class="input-field col s12">
+      <input id="correoContacto" name="correoContacto" type="text" class="validate" [ngClass]="{'invalid': f.submitted && !correoContacto.valid }"
+        [(ngModel)]="model.correoContacto" #correoContacto="ngModel" required>
+      <label for="correoContacto">Correo de contacto</label>
+    </div>
+    
+    <h6>Correo</h6>
+    <div class="divider mb-3"></div>
+    <div class="input-field col s12">
+      <input id="senderSmtp" name="senderSmtp" type="text" class="validate" [ngClass]="{'invalid': f.submitted && !senderSmtp.valid }" [(ngModel)]="model.senderSmtp"
+        #senderSmtp="ngModel" required>
+      <label for="senderSmtp">SenderSmtpsenderSmtp de envío de correo</label>
+    </div>
+    <div class="input-field col s12 m6">
+      <input id="usuarioSmtp" name="usuarioSmtp" type="text" class="validate" [ngClass]="{'invalid': f.submitted && !usuarioSmtp.valid }" [(ngModel)]="model.usuarioSmtp"
+        #usuarioSmtp="ngModel" required>
+      <label for="usuarioSmtp">Usuario SMTP</label>
+    </div>
+    <div class="input-field col s12 m6">
+      <input id="contrasenaSmtp" name="contrasenaSmtp" type="password" class="validate" [ngClass]="{'invalid': f.submitted && !contrasenaSmtp.valid }"
+        [(ngModel)]="model.contrasenaSmtp" #contrasenaSmtp="ngModel" required>
+      <label for="contrasenaSmtp">Contraseña SMTP</label>
+    </div>
+
+    <h6>Redes sociales de contacto</h6>
+    <div class="divider mb-3"></div>
+    <div class="input-field col s12">
+      <input id="fb" name="fb" type="text" class="validate" [ngClass]="{'invalid': f.submitted && !fb.valid }"
+        [(ngModel)]="model.fb" #fb="ngModel" required>
+      <label for="fb">Facebook</label>
+    </div>
+    <div class="input-field col s12">
+      <input id="tw" name="tw" type="text" class="validate" [ngClass]="{'invalid': f.submitted && !tw.valid }" [(ngModel)]="model.tw"
+        #tw="ngModel" required>
+      <label for="tw">Twitter</label>
+    </div>
+    <div class="input-field col s12">
+      <input id="ig" name="ig" type="text" [(ngModel)]="model.ig"
+        #ig="ngModel">
+      <label for="ig">Instagram</label>
+    </div>
+    <div class="input-field col s12">
+      <input id="in" name="in" type="text" [(ngModel)]="model.in" #in="ngModel">
+      <label for="in">LinkedIn</label>
+    </div>
+  </div>
+  <div class="row">
+    <button class="btn waves-effect waves-light col s12 m5 offset-m1" type="submit">
+      Guardar
+      <i class="material-icons right">save</i>
+    </button>
+    <button class="waves-effect waves-green btn-flat col s12 m5" type="button" (click)="_cancelar()">
+      Cancelar
+      <i class="material-icons right">cancel</i>
+    </button>
+  </div>
+</form>

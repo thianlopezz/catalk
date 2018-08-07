@@ -3,6 +3,7 @@ const template = require('email-templates').EmailTemplate;
 const async = require('async');
 const nodemailer = require('nodemailer');
 const sgTransport = require('nodemailer-sendgrid-transport');
+const ParametrosDAO = require('../models/parametros/ParametrosDAO');
 
 function CorreoController() {
 
@@ -13,7 +14,7 @@ function CorreoController() {
         }
     }
 
-    const sender = 'noreplay@ucsg.computacion.com'
+    let sender = 'noreplay@ucsg.computacion.com';
 
     this.enviar = function (asunto, destinatario, plantilla, claves) {
 
@@ -23,18 +24,37 @@ function CorreoController() {
                 async.waterfall([
                     function (next) {
 
-                        const datos = getDiccionario(claves);
+                        // OBTENGO LOS PARAMETROS DEL SISTEMA
+                        ParametrosDAO.get()
+                            .then(parametros => {
 
-                        var motor = new template(plantilla);
-                        motor.render(datos, function (error, resultado) {
+                                // CONFIGURO PARAMETROS
+                                claves.correoAdmin = parametros.correoContacto;
+                                claves.fb = parametros.fb;
+                                claves.tw = parametros.tw;
+                                claves.ig = parametros.ig;
+                                claves.in = parametros.in;
 
-                            if (resultado == undefined) {
-                                console.log('Error de plantilla html>>' + error.message)
-                                next({ success: false, error });
-                            } else {
-                                next(resultado.html);
-                            }
-                        });
+                                sender = parametros.senderSmtp;
+                                options.auth.api_user = parametros.usuarioSmtp;
+                                options.auth.api_key = parametros.contrasenaSmtp;
+
+                                // const datos = getDiccionario(claves);
+                                const datos = claves;
+
+                                var motor = new template(plantilla);
+                                motor.render(datos, function (error, resultado) {
+
+                                    if (resultado === undefined) {
+                                        console.log('Error de plantilla html>>' + error.message)
+                                        next({ success: false, error });
+                                    } else {
+                                        next(resultado.html);
+                                    }
+                                });
+                            }).catch(error => {
+                                //HANDLE ERROR
+                            });
                     }
                 ], function (html) {
 
@@ -81,11 +101,11 @@ function CorreoController() {
             var aux0 = aux[i].split('&');
 
             // retorno.push({clave: aux0[0], valor: aux0[1]});
-            if (aux0 != ''){
+            if (aux0 != '') {
                 retorno['' + aux0[0].trim() + ''] = aux0[1].trim();
-            }                
+            }
         }
-        
+
         return retorno;
     }
 }

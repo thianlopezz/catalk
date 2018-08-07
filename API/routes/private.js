@@ -1,10 +1,26 @@
 const express = require('express');
 const router = express.Router();
 const jwt = require('jsonwebtoken');
+const moment = require('moment');
+const multer = require('multer');
 
 const secret = 'catalk';
 
 const AdmisionesDAO = require('../models/admisiones/AdmisionesDAO');
+const ModeloSolicitudesDAO = require('../models/modelo_solicitudes/ModeloSolicitudesDAO');
+const TramitesDAO = require('../models/tramites/TramitesDAO');
+const ParametrosDAO = require('../models/parametros/ParametrosDAO');
+
+// PARA GUARDAR ARCHIVO
+const storage = multer.diskStorage({
+  destination: './API/files',
+  filename(req, file, callback) {
+    let nameArr = file.originalname.split('.');
+    callback(null, `SOLICITUD_${moment().format('DDMMYYYYhhmmss')}.${nameArr[nameArr.length - 1]}`);
+  }
+});
+
+const upload = multer({ storage });
 
 router.get('/', (req, res) => {
   res.send('private works!');
@@ -40,6 +56,7 @@ router.use(function (req, res, next) {
   }
 });
 
+// ADMISIONES
 router.get('/admisiones', (req, res) => {
 
   AdmisionesDAO.getAll()
@@ -47,24 +64,65 @@ router.get('/admisiones', (req, res) => {
     .catch(error => res.send({ success: false, mensaje: error.message, error }));
 });
 
-router.get('/admisiones/:idAdmision', (req, res) => {
-
-  AdmisionesDAO.getById(req.params.idAdmision)
-    .then(admision => {
-
-      if (admision) {
-        res.json({ success: true, data: admision });
-      } else {
-        res.status(404).send({ success: false, mensaje: 'Admisión no encontrada.' })
-      }
-    })
-    .catch(error => res.send({ success: false, mensaje: error.message, error }))
-});
-
 router.post('/admisiones/:accion', (req, res) => {
 
   AdmisionesDAO.mantenimiento(req.params.accion, req.body)
     .then(admision => res.json({ success: true, data: admision }))
+    .catch(error => res.send({ success: false, mensaje: error.message, error }))
+});
+
+// TRAMITES
+router.get('/tramites', (req, res) => {
+
+  TramitesDAO.getAll()
+    .then(tramites => res.json({ success: true, data: tramites }))
+    .catch(error => res.send({ success: false, mensaje: error.message, error }));
+});
+
+router.post('/tramites/:accion', (req, res) => {
+
+  TramitesDAO.mantenimiento(req.params.accion, req.body)
+    .then(tramite => res.json({ success: true, data: tramite }))
+    .catch(error => res.send({ success: false, mensaje: error.message, error }))
+});
+
+// SOLICITUDES
+router.get('/solicitudes', (req, res) => {
+
+  ModeloSolicitudesDAO.getAll()
+    .then(modelos => res.json({ success: true, data: modelos }))
+    .catch(error => res.send({ success: false, mensaje: error.message, error }));
+});
+
+router.post('/solicitudes/:accion', upload.single('file'), (req, res) => {
+
+  if (req.file) {
+    req.body.archivo = req.file.filename;
+  }
+
+  try {
+    req.body.detalles = JSON.parse(req.body.detalles);
+  } catch (ex) {
+    req.body.detalles = [];
+  }
+
+  ModeloSolicitudesDAO.mantenimiento(req.params.accion, req.body)
+    .then(solicitud => res.json({ success: true, data: solicitud }))
+    .catch(error => res.send({ success: false, mensaje: error.message, error }));
+});
+
+// PARAMETROS
+router.get('/parametros', (req, res) => {
+
+  ParametrosDAO.get()
+    .then(parametros => res.json({ success: true, data: parametros }))
+    .catch(error => res.send({ success: false, mensaje: error.message, error }));
+});
+
+router.post('/parametros/:accion', (req, res) => {
+
+  ParametrosDAO.mantenimiento(req.params.accion, req.body)
+    .then(parametros => res.json({ success: true, data: parametros }))
     .catch(error => res.send({ success: false, mensaje: error.message, error }))
 });
 

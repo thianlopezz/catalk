@@ -1,0 +1,31 @@
+<div class="card horizontal">
+  <div class="card-header">
+    <span class="card-title">{{tramite.tramite}}</span>
+    <div [hidden]="!botonera" class="botonera">
+      <a target="_blank" [href]="'/tramites/ex/' + tramite._id" class="btn tooltipped mx-1" data-position="bottom" data-tooltip="Vista previa">
+        <i class="material-icons">remove_red_eye</i>
+      </a>
+      <a [routerLink]="['/tramites', tramite._id, 'edit']" class="btn tooltipped mx-1" data-position="bottom" data-tooltip="Editar">
+        <i class="material-icons">edit</i>
+      </a>
+    </div>
+  </div>
+  <div class="card-content">
+    <div class="row">
+      <div class="col m12">
+        <p>{{tramite.descripcion}}</p>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col m12">
+        <label for="valor">
+          <strong>Valor:</strong>
+        </label>
+        &nbsp;
+        <div id="valor" name="valor" class="chip">
+          {{tramite.valor | currency}}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

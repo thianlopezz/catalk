@@ -10,40 +10,25 @@
 
 <body>
   <div class="container">
-    <section class="cabecera">
-      <table>
-        <tr>
-          <td>
-            <img src="https://www.serviyaec.com/assets/imgs/servico1.png" width="75px" alt="logo-serviyaec">
-          </td>
-          <td class="titulo" style="width: 100%;text-align: right;">
-            <h4 class="titulo">Catalk informa</h4>
-          </td>
-        </tr>
-      </table>
+    <section class="cabecera" style="text-align:center">
+      <img src="https://catalk.herokuapp.com/assets/images/logo_ing.png" width="240px" alt="logo-ING">
+      </td>
     </section>
+    <h1 style="font-size: 1.5rem; color: #a74f52;">Catalk informa</h1>
     <section class="cuerpo">
-      <br>
-      <br>
-      <br>
-      <table>
-        <tr>
-          <td>
-            <p>Hola, en el presente correo te proporcionamos toda la información respecto a las admisiones de nuestra carrera.</p>
-            <p>Cualquier duda no olvides comunicarte a <a href="mailto:{{correoAdmin}}?Subject=información" target="_top">{{correoAdmin}}</a>.</p>
-          </td>
-        </tr>
-      </table>
-      {{{infoAdmision}}}
-      <hr>
-      <br>
+      <p>Hola, en el presente correo te proporcionamos toda la información respecto a las admisiones de nuestra carrera.</p>
+      <p>Cualquier duda no olvides comunicarte a
+        <a href="mailto:{{correoAdmin}}?Subject=información" target="_top">{{correoAdmin}}</a>.</p>
+      <p style="text-align:center">
     </section>
+    {{{infoAdmision}}}
     <br>
     <section class="condiciones">
-      <p>No responda este correo, cualquier duda o información escriba a nuestro equipo de soporte.
+      <p>No responda este correo, cualquier duda o información escriba a
         <a href="mailto:{{correoAdmin}}?Subject=información" target="_top">{{correoAdmin}}</a>.
       </p>
     </section>
+    <hr>
     <section class="pie">
       <table>
         <tr>
@@ -51,16 +36,13 @@
             <p>Todos los derechos reservados</p>
           </td>
           <td class="social">
-            <a href="https://www.facebook.com/serviyaec">
+            <a href="https://www.facebook.com/{{fb}}">
               <img src="https://correo-generico.herokuapp.com/fb.png" alt="fb">
             </a>
-            <a href="https://twitter.com/serviyaec">
+            <a href="https://twitter.com/{{tw}}">
               <img src="https://correo-generico.herokuapp.com/tw.png" alt="tw">
             </a>
-            <a href="https://www.instagram.com/serviyaec">
-              <img src="https://correo-generico.herokuapp.com/ig.png" alt="tw">
-            </a>
-            <a href="https://www.linkedin.com/in/thianlopezz/">
+            <a href="https://www.linkedin.com/in/{{in}}">
               <img src="https://correo-generico.herokuapp.com/in.png" alt="in">
             </a>
           </td>

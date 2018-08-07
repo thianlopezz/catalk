@@ -18,6 +18,9 @@ app.use(bodyParser.urlencoded({ extended: false }));
 
 app.use(express.static(path.join(__dirname, '../dist')));
 
+// SERVIR CARPETA DONDE SE VAN A GUARDAR LAS SUBIDAS DE ARCHIVOS
+app.use(express.static(path.join(__dirname, '../API/files')));
+
 app.use('/api', public);
 app.use('/private', private);
 // app.use(cors());

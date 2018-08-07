@@ -1,0 +1,85 @@
+<div class="container">
+  <h2>Trámites</h2>
+  <div class="row">
+    <div *ngIf="estado!=='editar'" class="col s12">
+      <app-card-tramite-detalle [tramite]="tramite" [botonera]="true"></app-card-tramite-detalle>
+    </div>
+    <div *ngIf="estado==='editar'" class="col s12 m8 offset-m2">
+      <div class="card">
+        <div class="card-content">
+          <app-form-tramites [model]="tramite" (success)="onSuccessForm($event)" (cancelar)="onCancelarForm($event)"></app-form-tramites>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col s12">
+      <ul class="tabs">
+        <li class="tab col s6">
+          <a class="active" href="#detalles">Detalles</a>
+        </li>
+        <li class="tab col s6">
+          <a href="#requisitos">Requisitos</a>
+        </li>
+      </ul>
+      <div id="detalles" class="col s12">
+        <app-card-tramite-detalle-item *ngFor="let detalle of detalles; let i = index" [index]="i" [model]="detalle" [solicitudes]="solicitudes"
+          (insertar)="onInsertarDetalle($event)" (editar)="onEditarDetalle($event)" (modificar)="onModificarDetalle($event)"
+          (eliminar)="onEliminarDetalle($event)" (cancelar)="onCancelarDetalle($event)" (arriba)="onArribaDetalle($event)"
+          (abajo)="onAbajoDetalle($event)"></app-card-tramite-detalle-item>
+        <div class="card-panel row valign-wrapper p-1">
+          <div class="col s12 m4 offset-m4 center-align">
+            <!-- <a href="javascript:;" (click)="addNuevoDetalle()">
+              Nuevo detalle
+              <i class="material-icons">note_add</i>
+            </a> -->
+            <a class='dropdown-trigger' href='javascript:;' data-target='ddDetalle'>
+              Nuevo detalle
+              <i class="material-icons">note_add</i>
+            </a>
+            <ul id='ddDetalle' class='dropdown-content'>
+              <li>
+                <a href="javascript:;" (click)="addNuevoDetalle('DESCRIPCION')">Detalle</a>
+              </li>
+              <li>
+                <a href="javascript:;" (click)="addNuevoDetalle('MODELO')">Modelo de solicitud</a>
+              </li>
+              <li>
+                <a href="javascript:;" (click)="addNuevoDetalle('LINK')">Link</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div id="requisitos" class="col s12">
+        <app-card-tramite-detalle-item *ngFor="let requisito of requisitos; let i = index" [index]="i" [model]="requisito" [solicitudes]="solicitudes"
+          [requisito]="true" (insertar)="onInsertarRequisito($event)" (editar)="onEditarRequisito($event)" (modificar)="onModificarRequisito($event)"
+          (eliminar)="onEliminarRequisito($event)" (cancelar)="onCancelarRequisito($event)" (arriba)="onArribaRequisito($event)"
+          (abajo)="onAbajoRequisito($event)"></app-card-tramite-detalle-item>
+        <div class="card-panel row valign-wrapper p-1">
+          <div class="col s12 m4 offset-m4 center-align">
+            <!-- <a href="javascript:;" (click)="addNuevoRequisito()">
+              Nuevo requisito
+              <i class="material-icons">note_add</i>
+            </a> -->
+            <a class='dropdown-trigger' href='javascript:;' data-target='ddRequisito'>
+              Nuevo requisito
+              <i class="material-icons">note_add</i>
+            </a>
+            <ul id='ddRequisito' class='dropdown-content'>
+              <li>
+                <a href="javascript:;" (click)="addNuevoRequisito('DESCRIPCION')">Requisito</a>
+              </li>
+              <li>
+                <a href="javascript:;" (click)="addNuevoRequisito('MODELO')">Modelo de solicitud</a>
+              </li>
+              <li>
+                <a href="javascript:;" (click)="addNuevoRequisito('LINK')">Link</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -8,7 +8,7 @@
     <div class="input-field col s12 m2">
       <input id="valor" name="valor" type="text" class="validate" [ngClass]="{'invalid': f.submitted && !valor.valid }"
         [(ngModel)]="model.valor" #valor="ngModel" required>
-      <label for="tipoAdmision">Valor</label>
+      <label for="valor">Valor</label>
     </div>
     <div class="input-field col s12 m6">
       <input id="feInicio" type="text" class="datepicker validate" required>
@@ -22,6 +22,14 @@
       <textarea id="descripcion" name="descripcion" class="materialize-textarea validate" [ngClass]="{'invalid': f.submitted && !descripcion.valid }"
         [(ngModel)]="model.descripcion" #descripcion="ngModel" required></textarea>
       <label for="descripcion">Descripción</label>
+    </div>
+    
+    <h6>Dialogflow</h6>
+    <div class="divider mb-3"></div>
+    <div class="input-field col s12">
+      <input id="keyDialogflow" name="keyDialogflow" type="text" class="validate" [ngClass]="{'invalid': f.submitted && !keyDialogflow.valid }" [(ngModel)]="model.keyDialogflow"
+        #keyDialogflow="ngModel" required>
+      <label for="keyDialogflow">Key unico de Dialogflow</label>
     </div>
   </div>
   <div class="row">

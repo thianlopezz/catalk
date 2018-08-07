@@ -1,7 +1,7 @@
 import { Component, OnInit, AfterViewInit } from '@angular/core';
 import { trigger, transition, style, animate } from '@angular/animations';
 import { AdmisionesService } from './admisiones.service';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 
 declare var jQuery: any;
 declare var M: any;
@@ -31,8 +31,20 @@ export class AdmisionesComponent implements OnInit, AfterViewInit {
   admisiones = [];
   model: any = {};
 
+  idAdmision;
+
+  mensajeConfirmacion;
+
   constructor(private router: Router,
-    private admisionesService: AdmisionesService) { }
+    private activatedRoute: ActivatedRoute,
+    private admisionesService: AdmisionesService) {
+
+    this.idAdmision = this.activatedRoute.snapshot.paramMap.get('id');
+
+    if (this.idAdmision) {
+      this.estado = 'formulario';
+    }
+  }
 
   ngOnInit() {
 
@@ -41,6 +53,7 @@ export class AdmisionesComponent implements OnInit, AfterViewInit {
 
   ngAfterViewInit() {
     jQuery('.fixed-action-btn').floatingActionButton();
+    jQuery('.modal').modal();
   }
 
   onSuccessForm() {
@@ -52,6 +65,7 @@ export class AdmisionesComponent implements OnInit, AfterViewInit {
   onCancelarForm() {
 
     this.estado = 'lista';
+    this.model = {};
   }
 
   getAdmisiones() {
@@ -62,7 +76,17 @@ export class AdmisionesComponent implements OnInit, AfterViewInit {
       .subscribe(response => {
 
         if (response.success) {
+
           this.admisiones = response.data;
+
+          if (this.idAdmision) {
+
+            this.model = this.admisiones.find(x => x._id === this.idAdmision);
+
+            setTimeout(() => {
+              M.updateTextFields();
+            }, 100);
+          }
         } else {
           M.toast({ html: 'No se pudo cargar las admisiones, inténtelo más tarde.' }, 1500);
           console.log(response.error);
@@ -89,7 +113,43 @@ export class AdmisionesComponent implements OnInit, AfterViewInit {
   }
 
   onEliminar(admision) {
+    this.model = admision;
+    this.mensajeConfirmacion = '¿Está seguro de eliminar el registro?';
+    jQuery('#modalConfirma').modal('open');
+  }
 
+  onConfirmarModal() {
+    this.delete();
+  }
+
+  onCancelarModal() {
+    this.model = {};
+    jQuery('#modalConfirma').modal('close');
+  }
+
+  delete() {
+
+    this.admisionesService.mantenimiento('D', this.model)
+      .subscribe(result => {
+
+        if (result.success) {
+
+          M.toast({ html: 'Registro eliminado.' }, 1500);
+          this.getAdmisiones();
+        } else {
+
+          M.toast({ html: 'Ocurrió un error inténtelo más tarde.' }, 1500);
+          console.log(result.error);
+        }
+
+        jQuery('#modalConfirma').modal('close');
+      },
+        error => {
+
+          M.toast({ html: 'Ocurrió un error inténtelo más tarde.' }, 1500);
+          console.log(error);
+          jQuery('#modalConfirma').modal('close');
+        });
   }
 
 }
