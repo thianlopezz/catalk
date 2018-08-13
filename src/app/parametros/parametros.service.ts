@@ -7,8 +7,6 @@ import { map } from 'rxjs/operators';
 })
 export class ParametrosService {
 
-  USUARIO = JSON.parse(localStorage.getItem('session'));
-
   constructor(private http: Http) { }
 
   getParametros() {
@@ -19,7 +17,8 @@ export class ParametrosService {
 
   mantenimiento(accion, parametros) {
 
-    parametros.idUsuario = this.USUARIO._id;
+    const USUARIO = JSON.parse(localStorage.getItem('session'));
+    parametros.idUsuario = USUARIO._id;
 
     return this.http.post('/private/parametros/' + accion, parametros, this.jwt())
       .pipe(map((response: Response) => response.json()));

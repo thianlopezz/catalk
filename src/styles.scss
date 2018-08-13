@@ -10,4 +10,8 @@ $success-color: color("green", "base") !default;
 $error-color: color("red", "base") !default;
 $link-color: color("light-blue", "darken-1") !default;
 
+.card .card-action a:not(.btn):not(.btn-large):not(.btn-small):not(.btn-large):not(.btn-floating) {
+    color: $secondary-color;
+}
+
 @import "../node_modules/materialize-css/sass/materialize.scss";

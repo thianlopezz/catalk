@@ -6,8 +6,8 @@
       <label for="tipoAdmision">Tipo de admisión</label>
     </div>
     <div class="input-field col s12 m2">
-      <input id="valor" name="valor" type="text" class="validate" [ngClass]="{'invalid': f.submitted && !valor.valid }"
-        [(ngModel)]="model.valor" #valor="ngModel" required>
+      <input id="valor" name="valor" type="text" class="validate" [ngClass]="{'invalid': f.submitted && !valor.valid }" [(ngModel)]="model.valor"
+        #valor="ngModel" required>
       <label for="valor">Valor</label>
     </div>
     <div class="input-field col s12 m6">
@@ -23,23 +23,33 @@
         [(ngModel)]="model.descripcion" #descripcion="ngModel" required></textarea>
       <label for="descripcion">Descripción</label>
     </div>
-    
+
     <h6>Dialogflow</h6>
     <div class="divider mb-3"></div>
     <div class="input-field col s12">
-      <input id="keyDialogflow" name="keyDialogflow" type="text" class="validate" [ngClass]="{'invalid': f.submitted && !keyDialogflow.valid }" [(ngModel)]="model.keyDialogflow"
-        #keyDialogflow="ngModel" required>
+      <input id="keyDialogflow" name="keyDialogflow" type="text" class="validate" [ngClass]="{'invalid': f.submitted && !keyDialogflow.valid }"
+        [(ngModel)]="model.keyDialogflow" #keyDialogflow="ngModel" required>
       <label for="keyDialogflow">Key unico de Dialogflow</label>
     </div>
   </div>
-  <div class="row">
-    <button class="btn waves-effect waves-light col s12 m5 offset-m1" type="submit">
+  <div class="right-align">
+    <button type="submit" class="btn waves-effect waves-light">
       Guardar
       <i class="material-icons right">save</i>
     </button>
-    <button class="waves-effect waves-green btn-flat col s12 m5" type="button" (click)="_cancelar()">
+    <button type="button" class="waves-effect btn-flat" (click)="_cancelar()">
       Cancelar
       <i class="material-icons right">cancel</i>
     </button>
   </div>
+  <!-- <div class="row">
+    <button type="submit" class="btn waves-effect waves-light col s12 m5 offset-m1">
+      Guardar
+      <i class="material-icons right">save</i>
+    </button>
+    <button type="button" class="waves-effect btn-flat col s12 m5"(click)="_cancelar()">
+      Cancelar
+      <i class="material-icons right">cancel</i>
+    </button>
+  </div> -->
 </form>

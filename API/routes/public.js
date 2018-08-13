@@ -89,4 +89,26 @@ router.get('/solicitudes/:idSolicitud', (req, res) => {
     .catch(error => res.send({ success: false, mensaje: error.message, error }))
 });
 
+// OLVIDE CONTRASENA
+router.post('/usuario/contrasena', (req, res) => {
+
+  UsuarioDAO.olvideContrasena(req.body)
+    .then(usuario => {
+
+      res.json({ success: true, data: usuario });
+    })
+    .catch(error => res.send({ success: false, mensaje: error.message, error }))
+});
+
+// RECUPERA CONTRASENA
+router.post('/usuario/contrasena/recupera', (req, res) => {
+
+  UsuarioDAO.recuperaContrasena(req.body)
+    .then(usuario => {
+
+      res.json({ success: true, data: usuario });
+    })
+    .catch(error => res.send({ success: false, mensaje: error.message, error }))
+});
+
 module.exports = router;

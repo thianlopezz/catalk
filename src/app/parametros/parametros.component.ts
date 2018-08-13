@@ -23,7 +23,6 @@ export class ParametrosComponent implements OnInit {
   }
 
   ngOnInit() {
-
     this.getParametros();
   }
 

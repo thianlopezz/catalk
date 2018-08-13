@@ -30,7 +30,6 @@ export class SolicitudDetalleExComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit() {
-
     jQuery('.tabs').tabs();
   }
 

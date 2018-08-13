@@ -7,11 +7,9 @@ import { map } from 'rxjs/operators';
 })
 export class TramitesService {
 
-  USUARIO = JSON.parse(localStorage.getItem('session'));
-
   constructor(private http: Http) { }
 
-  geTramites() {
+  getTramites() {
 
     return this.http.get('/private/tramites/', this.jwt())
       .pipe(map((response: Response) => response.json()));
@@ -25,7 +23,8 @@ export class TramitesService {
 
   mantenimiento(accion, tramite) {
 
-    tramite.idUsuario = this.USUARIO._id;
+    const USUARIO = JSON.parse(localStorage.getItem('session'));
+    tramite.idUsuario = USUARIO._id;
 
     return this.http.post('/private/tramites/' + accion, tramite, this.jwt())
       .pipe(map((response: Response) => response.json()));

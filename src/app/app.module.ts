@@ -41,6 +41,14 @@ import { CardTramiteComponent } from './tramites/list-tramites/card-tramite/card
 import { ModalConfirmaComponent } from './common/modal-confirma/modal-confirma.component';
 import { ParametrosComponent } from './parametros/parametros.component';
 import { FormParametrosComponent } from './parametros/form-parametros/form-parametros.component';
+import { UsuariosComponent } from './usuarios/usuarios.component';
+import { FormUsuariosComponent } from './usuarios/form-usuarios/form-usuarios.component';
+import { ListUsuariosComponent } from './usuarios/list-usuarios/list-usuarios.component';
+import { CardUsuarioComponent } from './usuarios/list-usuarios/card-usuario/card-usuario.component';
+import { FormContrasenaComponent } from './usuarios/form-contrasena/form-contrasena.component';
+import { GenericoComponent } from './generico/generico.component';
+import { OlvideContrasenaComponent } from './generico/olvide-contrasena/olvide-contrasena.component';
+import { RecuperaContrasenaComponent } from './generico/recupera-contrasena/recupera-contrasena.component';
 
 @NgModule({
   declarations: [
@@ -76,7 +84,15 @@ import { FormParametrosComponent } from './parametros/form-parametros/form-param
     TramiteDetalleExComponent,
     ModalConfirmaComponent,
     ParametrosComponent,
-    FormParametrosComponent
+    FormParametrosComponent,
+    UsuariosComponent,
+    FormUsuariosComponent,
+    ListUsuariosComponent,
+    CardUsuarioComponent,
+    FormContrasenaComponent,
+    GenericoComponent,
+    OlvideContrasenaComponent,
+    RecuperaContrasenaComponent
   ],
   imports: [
     BrowserModule,

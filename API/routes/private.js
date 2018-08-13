@@ -11,6 +11,8 @@ const ModeloSolicitudesDAO = require('../models/modelo_solicitudes/ModeloSolicit
 const TramitesDAO = require('../models/tramites/TramitesDAO');
 const ParametrosDAO = require('../models/parametros/ParametrosDAO');
 
+const UsuarioDAO = require('../models/usuario/UsuarioDAO');
+
 // PARA GUARDAR ARCHIVO
 const storage = multer.diskStorage({
   destination: './API/files',
@@ -123,6 +125,42 @@ router.post('/parametros/:accion', (req, res) => {
 
   ParametrosDAO.mantenimiento(req.params.accion, req.body)
     .then(parametros => res.json({ success: true, data: parametros }))
+    .catch(error => res.send({ success: false, mensaje: error.message, error }))
+});
+
+// USUARIOS
+router.get('/usuarios', (req, res) => {
+
+  UsuarioDAO.getAll()
+    .then(usuarios => res.json({ success: true, data: usuarios }))
+    .catch(error => res.send({ success: false, mensaje: error.message, error }));
+});
+
+router.get('/usuarios/:idUsuario', (req, res) => {
+
+  UsuarioDAO.getById(req.params.idUsuario)
+    .then(usuario => {
+
+      if (usuario) {
+        res.json({ success: true, data: usuario });
+      } else {
+        res.status(404).send({ success: false, mensaje: 'Usuario no encontrado.' })
+      }
+    })
+    .catch(error => res.send({ success: false, mensaje: error.message, error }))
+});
+
+router.post('/usuarios/:accion', (req, res) => {
+
+  UsuarioDAO.mantenimiento(req.params.accion, req.body)
+    .then(usuario => res.json({ success: true, data: usuario }))
+    .catch(error => res.send({ success: false, mensaje: error.message, error }))
+});
+
+router.post('/usuario/contrasena', (req, res) => {
+
+  UsuarioDAO.contrasena(req.body)
+    .then(usuario => res.json({ success: true, data: usuario }))
     .catch(error => res.send({ success: false, mensaje: error.message, error }))
 });
 

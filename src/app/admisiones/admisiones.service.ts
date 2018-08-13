@@ -7,8 +7,6 @@ import { map } from 'rxjs/operators';
 })
 export class AdmisionesService {
 
-  USUARIO = JSON.parse(localStorage.getItem('session'));
-
   constructor(private http: Http) { }
 
   getAdmisiones() {
@@ -25,7 +23,8 @@ export class AdmisionesService {
 
   mantenimiento(accion, admision) {
 
-    admision.idUsuario = this.USUARIO._id;
+    const USUARIO = JSON.parse(localStorage.getItem('session'));
+    admision.idUsuario = USUARIO._id;
 
     return this.http.post('/private/admisiones/' + accion, admision, this.jwt())
       .pipe(map((response: Response) => response.json()));

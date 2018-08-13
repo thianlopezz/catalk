@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, AfterViewInit, Output, EventEmitter, OnChanges } from '@angular/core';
+import { Component, OnInit, Input, AfterViewInit, Output, EventEmitter, OnChanges, OnDestroy } from '@angular/core';
 
 declare var jQuery: any;
 
@@ -10,20 +10,28 @@ declare var jQuery: any;
         <span class="card-title">{{admision.tipoAdmision}}</span>
         <p>{{admision.descripcion}}</p>
       </div>
-      <div class="card-action">
-        <a href="javascript:;" class="btn tooltipped mx-1" data-position="bottom" data-tooltip="Detalles" (click)="_detalle()">
+      <div class="card-action center-align">
+        <a [routerLink]="" class="base-text tooltipped mx-3" data-position="bottom" data-tooltip="Detalles" (click)="_detalle()">
           <i class="material-icons">list_alt</i>
         </a>
-        <a href="javascript:;" class="btn tooltipped mx-1" data-position="bottom" data-tooltip="Editar" (click)="_editar()">
+        <a [routerLink]="" class="tooltipped mx-3" data-position="bottom" data-tooltip="Editar" (click)="_editar()">
           <i class="material-icons">edit</i>
         </a>
-        <a href="javascript:;" class="btn btn-flat red-text tooltipped mx-1"
+        <a [routerLink]="" class="red-text tooltipped mx-3"
             data-position="bottom" data-tooltip="Eliminar" (click)="_eliminar()">
           <i class="material-icons">delete</i>
         </a>
       </div>
     </div>`,
-  styles: [``]
+  styles: [`.card-content {
+    height: 9rem;
+  }
+  .card-content>p{
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+  }`]
 })
 export class CardTipoAdmisionComponent implements OnInit, AfterViewInit {
 

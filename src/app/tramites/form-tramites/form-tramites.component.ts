@@ -23,7 +23,6 @@ export class FormTramitesComponent implements OnInit, OnChanges, AfterViewInit {
   }
 
   ngOnChanges() {
-
   }
 
   ngAfterViewInit() {

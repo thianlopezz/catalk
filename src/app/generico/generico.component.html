@@ -1,0 +1,27 @@
+<div class="container">
+
+  <!-- OLVIDE CONTRASENA -->
+  <div *ngIf="OP==='OC'" class="row">
+    <div class="col s12 m8 offset-m2">
+      <div class="card">
+        <div class="card-content">
+          <span class="card-title">Olvidé mi contraseña</span>
+          <app-olvide-contrasena (success)="onSuccessOlvideRecupera()" (cancelar)="onCancelarOlvideRecupera()"></app-olvide-contrasena>
+        </div>
+      </div>
+      <p class="center-align">Ingresa tu correo para poder comenzar el proceso de recuperación de contraseña.</p>
+    </div>
+  </div>
+
+  <!-- RECUPERA CONTRASENA -->
+  <div *ngIf="OP==='RE'" class="row">
+    <div class="col s12 m8 offset-m2">
+      <div class="card">
+        <div class="card-content">
+          <span class="card-title">Recupera contraseña</span>
+          <app-recupera-contrasena [token]="token" (success)="onSuccessOlvideRecupera()" (cancelar)="onCancelarOlvideRecupera()"></app-recupera-contrasena>
+        </div>
+      </div>      
+    </div>
+  </div>
+</div>

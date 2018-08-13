@@ -4,6 +4,7 @@ import { NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
 
 declare var M: any;
+declare var jQuery: any;
 
 @Component({
   selector: 'app-login',
@@ -17,8 +18,7 @@ export class LoginComponent implements OnInit {
   constructor(private router: Router,
     private sessionService: SessionService) { }
 
-  ngOnInit() {
-  }
+  ngOnInit() { }
 
   login(f: NgForm) {
 

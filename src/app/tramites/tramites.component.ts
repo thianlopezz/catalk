@@ -35,7 +35,6 @@ export class TramitesComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit() {
-
     this.getTramites();
   }
 
@@ -60,7 +59,7 @@ export class TramitesComponent implements OnInit, AfterViewInit {
 
     this.loadingTramites = true;
 
-    this.tramitesService.geTramites()
+    this.tramitesService.getTramites()
       .subscribe(response => {
 
         if (response.success) {

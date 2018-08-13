@@ -25,7 +25,7 @@
           (cancelar)="onCancelarDetalle($event)" (arriba)="onArribaDetalle($event)" (abajo)="onAbajoDetalle($event)"></app-card-solicitud-detalle-item>
         <div class="card-panel row valign-wrapper p-1">
           <div class="col s12 center-align">
-            <a href="javascript:;" (click)="addNuevoDetalle()">
+            <a [routerLink]="" (click)="addNuevoDetalle()">
               Nuevo detalle
               <i class="material-icons">note_add</i>
             </a>

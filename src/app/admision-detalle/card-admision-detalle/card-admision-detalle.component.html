@@ -5,7 +5,7 @@
       <a target="_blank" [href]="'/admisiones/ex/' + admision._id" class="btn tooltipped mx-1" data-position="bottom" data-tooltip="Vista previa">
         <i class="material-icons">remove_red_eye</i>
       </a>
-      <a [routerLink]="['/admisiones', admision._id, 'edit']" class="btn tooltipped mx-1" data-position="bottom" data-tooltip="Editar">
+      <a [routerLink]="" class="btn tooltipped mx-1" data-position="bottom" data-tooltip="Editar" (click)="edit()">
         <i class="material-icons">edit</i>
       </a>
     </div>

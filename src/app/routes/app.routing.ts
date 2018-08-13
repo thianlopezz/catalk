@@ -12,9 +12,11 @@ import { TramitesComponent } from '../tramites/tramites.component';
 import { TramiteDetalleComponent } from '../tramite-detalle/tramite-detalle.component';
 import { TramiteDetalleExComponent } from '../public/tramite-detalle-ex/tramite-detalle-ex.component';
 import { ParametrosComponent } from '../parametros/parametros.component';
+import { UsuariosComponent } from '../usuarios/usuarios.component';
+import { GenericoComponent } from '../generico/generico.component';
 
 const appRoutes: Routes = [
-    { path: '', component: HomeComponent },
+    { path: '', component: LoginComponent },
     { path: 'login', component: LoginComponent },
     { path: 'ds', component: DashboardComponent },
 
@@ -32,6 +34,12 @@ const appRoutes: Routes = [
     { path: 'tramites/:id/edit', component: TramitesComponent },
     { path: 'tramites/:id', component: TramiteDetalleComponent },
     { path: 'tramites/ex/:id', component: TramiteDetalleExComponent },
+
+    { path: 'usuarios', component: UsuariosComponent },
+    { path: 'usuario/:id', component: UsuariosComponent },
+
+    { path: 'generico/:op', component: GenericoComponent },
+    { path: 'generico/:op/:token', component: GenericoComponent },
 
     { path: 'parametros', component: ParametrosComponent },
 

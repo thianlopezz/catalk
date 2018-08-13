@@ -4,7 +4,7 @@
       <!-- <img style="margin-left: 1rem;" src="/assets/images/logo_header_300x300.svg" width="130px" height="130px" alt="dcristhi"> -->
       Catalk
     </a>
-    <a href="javascript:;" data-target="ul-mobile" class="sidenav-trigger">
+    <a [routerLink]="" data-target="ul-mobile" class="sidenav-trigger">
       <i class="material-icons">menu</i>
     </a>
 
@@ -12,7 +12,7 @@
     <div [hidden]="usuario">
       <ul id="nav-mobile" style="margin-right: .7rem;" class="right hide-on-med-and-down">
         <li>
-          <a [routerLink]="['/']">
+          <a [routerLink]="['/login']">
             Login
             <i class="material-icons right">person_pin</i>
           </a>
@@ -20,7 +20,7 @@
       </ul>
       <ul class="sidenav" id="ul-mobile">
         <li>
-          <a [routerLink]="['/']">
+          <a [routerLink]="['/login']">
             Login
             <i class="material-icons right">person_pin</i>
           </a>
@@ -38,22 +38,25 @@
         </li>
         <li>
           <!-- Dropdown Trigger -->
-          <a class='dropdown-trigger btn' href="javascript:;" data-target='dropdown1'>
-            <span *ngIf="usuario">{{usuario.nombre + ' ' + usuario.apellido}}</span>             
+          <a class="dropdown-trigger center-align" style="MIN-WIDTH: 15rem;" [routerLink]="" data-target="dropdown1">
+            <span *ngIf="usuario">
+              {{usuario.nombre + ' ' + usuario.apellido}}               
+              <i class="material-icons right">account_circle</i>
+            </span>             
           </a>
 
           <!-- Dropdown Structure -->
-          <ul id='dropdown1' class='dropdown-content'>
+          <ul id="dropdown1" class="dropdown-content">
             <li>
-              <a href="javascript:;">
-                 Perfil
-                <i class="material-icons right">person</i>
+              <a [routerLink]="['usuario','contrasena']">
+                 Cambiar contraseña
+                <i class="material-icons right">lock</i>
               </a>
             </li>
             <li class="divider"></li>
             <li>
-              <a href="javascript:;" (click)="logOut()">
-                Cerrar Sesión
+              <a [routerLink]="" (click)="logOut()">
+                Cerrar sesión
                 <i class="material-icons right">power_settings_new</i>
               </a>
             </li>

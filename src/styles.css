@@ -1,4 +1,12 @@
 
+body {
+  background: #f8f8f8;
+}
+
+.card .card-action {
+    padding: 10px 24px!important;
+}
+
 .card-header {
   padding: 1rem;
 }

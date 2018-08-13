@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <title>Recuperación de contraseña</title>
+  <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN"
+    crossorigin="anonymous">
+</head>
+
+<body>
+  <div class="container">
+    <section class="cabecera" style="text-align:center">
+      <img src="https://catalk.herokuapp.com/assets/images/logo_ing.png" width="240px" alt="logo-ING">
+      </td>
+    </section>
+    <h1 style="font-size: 1.5rem; color: #a74f52;">Recuperación de contraseña</h1>
+    <section class="cuerpo">
+      <p>Hola {{nombre}}, hemos recibido tu solicitud de recuperación de contraseña, para continuar con el proceso por favor ingresa en el siguiente enlace:</p>
+      <p style="text-align:center">
+        <a href="{{urlRecupera}}">Recuperar contraseña</a>
+        </p>
+    </section>
+    <br>
+    <section class="condiciones">
+      <p>No responda este correo, cualquier duda o información escriba a
+        <a href="mailto:{{correoAdmin}}?Subject=Usuario" target="_top">{{correoAdmin}}</a>.
+      </p>
+    </section>
+    <hr>
+    <section class="pie">
+      <table>
+        <tr>
+          <td class="leyenda">
+            <p>Todos los derechos reservados</p>
+          </td>
+          <td class="social">
+            <a href="https://www.facebook.com/{{fb}}">
+              <img src="https://correo-generico.herokuapp.com/fb.png" alt="fb">
+            </a>
+            <a href="https://twitter.com/{{tw}}">
+              <img src="https://correo-generico.herokuapp.com/tw.png" alt="tw">
+            </a>
+            <a href="https://www.linkedin.com/in/{{in}}">
+              <img src="https://correo-generico.herokuapp.com/in.png" alt="in">
+            </a>
+          </td>
+        </tr>
+      </table>
+    </section>
+  </div>
+</body>
+
+</html>

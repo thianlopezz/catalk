@@ -7,8 +7,6 @@ import { map } from 'rxjs/operators';
 })
 export class SolicitudesService {
 
-  USUARIO = JSON.parse(localStorage.getItem('session'));
-
   constructor(private http: Http) { }
 
   getSolicitudes() {
@@ -38,7 +36,8 @@ export class SolicitudesService {
     const detalle = solicitud.detalles || [];
     data.append('detalles', JSON.stringify(detalle));
 
-    data.append('idUsuario', this.USUARIO._id);
+    const USUARIO = JSON.parse(localStorage.getItem('session'));
+    data.append('idUsuario', USUARIO._id);
 
     return this.http.post('/private/solicitudes/' + accion, data, this.jwt())
       .pipe(map((response: Response) => response.json()));

@@ -1,0 +1,29 @@
+<form name="form" (ngSubmit)="guardar(f)" #f="ngForm">
+  <div class="row">
+    <div class="input-field col s12">
+      <input id="anterior" name="anterior" type="password" class="validate" [ngClass]="{'invalid': f.submitted && !anterior.valid }" [(ngModel)]="model.anterior"
+        #anterior="ngModel" required>
+      <label for="anterior">Anterior contraseña</label>
+    </div>
+    <div class="input-field col s12">
+      <input id="contrasena" name="contrasena" type="password" class="validate" [ngClass]="{'invalid': f.submitted && !contrasena.valid }"
+        [(ngModel)]="model.contrasena" #contrasena="ngModel" required>
+      <label for="contrasena">Nueva contraseña</label>
+    </div>
+    <div class="input-field col s12">
+      <input id="contrasena_r" name="contrasena_r" type="password" class="validate" [ngClass]="{'invalid': f.submitted && !contrasena_r.valid }" [(ngModel)]="model.contrasena_r"
+        #contrasena_r="ngModel" required>
+      <label for="contrasena_r">Repetir nueva contraseña</label>
+    </div>
+  </div>
+  <div class="right-align">
+    <button class="btn waves-effect waves-light" type="submit">
+      Guardar
+      <i class="material-icons right">save</i>
+    </button>
+    <button class="waves-effect btn-flat" type="button" (click)="_cancelar()">
+      Cancelar
+      <i class="material-icons right">cancel</i>
+    </button>
+  </div>
+</form>

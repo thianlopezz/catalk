@@ -1,6 +1,5 @@
 <div class="container">
-  <h2>Admisiones</h2>
-
+  <h4 class="center-align">Admisiones</h4>
   <app-list-tipo-admision *ngIf="estado==='lista'" [loading]="loadingAdmisiones" [admisiones]="admisiones" (detalle)="onDetalle($event)"
     (editar)="onEditar($event)" (eliminar)="onEliminar($event)"></app-list-tipo-admision>
 

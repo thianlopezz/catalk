@@ -35,7 +35,6 @@ export class SolicitudesComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit() {
-
     this.getSolicitudes();
   }
 

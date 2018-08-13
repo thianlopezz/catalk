@@ -1,0 +1,29 @@
+<form name="form" (ngSubmit)="guardar(f)" #f="ngForm">
+  <div class="row">
+    <div class="input-field col s12">
+      <input id="nombre" name="nombre" type="text" class="validate" [ngClass]="{'invalid': f.submitted && !nombre.valid }" [(ngModel)]="model.nombre"
+        #nombre="ngModel" required>
+      <label for="nombre">Nombre</label>
+    </div>
+    <div class="input-field col s12">
+      <input id="apellido" name="apellido" type="text" class="validate" [ngClass]="{'invalid': f.submitted && !apellido.valid }"
+        [(ngModel)]="model.apellido" #apellido="ngModel" required>
+      <label for="apellido">Apellido</label>
+    </div>
+    <div class="input-field col s12">
+      <input id="correo" name="correo" type="text" class="validate" [ngClass]="{'invalid': f.submitted && !correo.valid }" [(ngModel)]="model.correo"
+        #correo="ngModel" required>
+      <label for="correo">Correo</label>
+    </div>
+  </div>
+  <div class="right-align">
+    <button class="btn waves-effect waves-light" type="submit">
+      Guardar
+      <i class="material-icons right">save</i>
+    </button>
+    <button class="waves-effect btn-flat" type="button" (click)="_cancelar()">
+      Cancelar
+      <i class="material-icons right">cancel</i>
+    </button>
+  </div>
+</form>
