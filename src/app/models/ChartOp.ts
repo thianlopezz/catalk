@@ -15,4 +15,5 @@ export class ChartOp {
         this.data = data;
         this.options = options;
     }
+
 }
