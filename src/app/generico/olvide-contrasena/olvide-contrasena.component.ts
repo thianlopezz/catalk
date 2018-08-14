@@ -1,6 +1,6 @@
 import { Component, OnInit, OnChanges, AfterViewInit, Input, Output, EventEmitter } from '@angular/core';
 import { UsuariosService } from '../../usuarios/usuarios.service';
-import { NgForm } from '../../../../node_modules/@angular/forms';
+import { NgForm } from '@angular/forms';
 
 declare var jQuery: any;
 declare var M: any;

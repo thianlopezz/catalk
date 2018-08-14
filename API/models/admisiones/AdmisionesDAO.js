@@ -58,15 +58,11 @@ function AdmisionesDAO() {
     }
 
     this.getByKey = function (key) {
-
+        
         return new Promise((resolve, reject) => {
 
-            Admisiones.find({ keyDialogflow: key })
+            Admisiones.findOne({ keyDialogflow: key })
                 .then(result => {
-
-                    // result = result.toJSON();
-                    result = result[0];
-                    // console.log(result);
 
                     // OBTENGO LOS MODELOS DE SOLICITUDES
                     ModeloSolicitudesDAO.getAll()

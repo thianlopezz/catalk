@@ -14,34 +14,39 @@ import { TramiteDetalleExComponent } from '../public/tramite-detalle-ex/tramite-
 import { ParametrosComponent } from '../parametros/parametros.component';
 import { UsuariosComponent } from '../usuarios/usuarios.component';
 import { GenericoComponent } from '../generico/generico.component';
+import { EstadisticasComponent } from '../estadisticas/estadisticas.component';
+import { RouteActivatorService } from '../login/route-activator.service';
 
 const appRoutes: Routes = [
     { path: '', component: LoginComponent },
     { path: 'login', component: LoginComponent },
-    { path: 'ds', component: DashboardComponent },
 
-    { path: 'admisiones', component: AdmisionesComponent },
-    { path: 'admisiones/:id/edit', component: AdmisionesComponent },
-    { path: 'admisiones/:id', component: AdmisionDetalleComponent },
+    { path: 'ds', component: DashboardComponent, canActivate: [RouteActivatorService] },
+
+    { path: 'admisiones', component: AdmisionesComponent, canActivate: [RouteActivatorService] },
+    { path: 'admisiones/:id/edit', component: AdmisionesComponent, canActivate: [RouteActivatorService] },
+    { path: 'admisiones/:id', component: AdmisionDetalleComponent, canActivate: [RouteActivatorService] },
     { path: 'admisiones/ex/:id', component: AdmisionDetalleExComponent },
 
-    { path: 'solicitudes', component: SolicitudesComponent },
-    { path: 'solicitudes/:id/edit', component: SolicitudesComponent },
-    { path: 'solicitudes/:id', component: SolicitudDetalleComponent },
+    { path: 'solicitudes', component: SolicitudesComponent, canActivate: [RouteActivatorService] },
+    { path: 'solicitudes/:id/edit', component: SolicitudesComponent, canActivate: [RouteActivatorService] },
+    { path: 'solicitudes/:id', component: SolicitudDetalleComponent, canActivate: [RouteActivatorService] },
     { path: 'solicitudes/ex/:id', component: SolicitudDetalleExComponent },
 
-    { path: 'tramites', component: TramitesComponent },
-    { path: 'tramites/:id/edit', component: TramitesComponent },
-    { path: 'tramites/:id', component: TramiteDetalleComponent },
+    { path: 'tramites', component: TramitesComponent, canActivate: [RouteActivatorService] },
+    { path: 'tramites/:id/edit', component: TramitesComponent, canActivate: [RouteActivatorService] },
+    { path: 'tramites/:id', component: TramiteDetalleComponent, canActivate: [RouteActivatorService] },
     { path: 'tramites/ex/:id', component: TramiteDetalleExComponent },
 
-    { path: 'usuarios', component: UsuariosComponent },
-    { path: 'usuario/:id', component: UsuariosComponent },
+    { path: 'usuarios', component: UsuariosComponent, canActivate: [RouteActivatorService] },
+    { path: 'usuario/:id', component: UsuariosComponent, canActivate: [RouteActivatorService] },
 
     { path: 'generico/:op', component: GenericoComponent },
     { path: 'generico/:op/:token', component: GenericoComponent },
 
-    { path: 'parametros', component: ParametrosComponent },
+    { path: 'parametros', component: ParametrosComponent, canActivate: [RouteActivatorService] },
+
+    { path: 'estadisticas', component: EstadisticasComponent, canActivate: [RouteActivatorService] },
 
     // { path: 'home', component: HomeComponent, canActivate: [RouteActivatorService] },
 

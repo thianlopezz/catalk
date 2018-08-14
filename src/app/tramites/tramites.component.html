@@ -1,5 +1,5 @@
 <div class="container">
-  <h2>Trámites</h2>
+  <h4 class="center-align">Trámites</h4>
   <app-list-tramites *ngIf="estado==='lista'" [loading]="loadingTramites" [tramites]="tramites" (detalle)="onDetalle($event)"
     (editar)="onEditar($event)" (eliminar)="onEliminar($event)"></app-list-tramites>
 

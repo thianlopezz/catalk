@@ -1,7 +1,4 @@
-
-// const URL_BASE = 'http://200.69.184.189:9001/';
-// const URL_BASE = 'https://catalk.herokuapp.com/';
-const URL_BASE = 'http://localhost:9001/';
+const URL_BASE = require('../UrlConfig').URL_BASE;
 
 const md5 = require('md5');
 const CorreoController = require('../../controllers/CorreoController');
@@ -13,9 +10,7 @@ function UsuarioDAO() {
 
     this.login = function (usuario, callback) {
 
-        console.log(usuario);
-
-        Usuario.findOne({ correo: usuario.correo, contrasena: md5(usuario.contrasena) },
+        Usuario.findOne({ correo: usuario.correo.toLowerCase(), contrasena: md5(usuario.contrasena) },
             function (err, _usuario) {
                 if (err) {
                     callback(new Error(err));
@@ -106,24 +101,38 @@ function UsuarioDAO() {
 
         return new Promise((resolve, reject) => {
 
-            const contrasena = contrasenaRandom();
+            // PRIMERO VERIFICO SI YA EXISTE ALGUIEN CON 
+            // EL MISMO CORREO
+            Usuario.findOne({ correo: model.correo.toLowerCase() })
+                .then(usuarioEncontrado => {
 
-            model.contrasena = md5(contrasena);
-            model.rol = 'ADMIN';
+                    if (usuarioEncontrado) {
 
-            const usuario = new Usuario(model);
+                        reject(new Error('El correo que estás ingresando ya está registrado.'))
+                    } else {
 
-            const claves = {
-                nombre: model.nombre,
-                correo: model.correo,
-                contrasena
-            }
+                        const contrasena = contrasenaRandom();
 
-            usuario.save()
-                .then(result => {
+                        model.correo = model.correo.toLowerCase();
+                        model.contrasena = md5(contrasena);
+                        model.rol = 'ADMIN';
 
-                    CorreoController.enviar('Nuevo usuario', model.correo, './plantillas_correo/nuevousuario', claves);
-                    resolve(result);
+                        const usuario = new Usuario(model);
+
+                        const claves = {
+                            nombre: model.nombre,
+                            correo: model.correo,
+                            contrasena
+                        }
+
+                        usuario.save()
+                            .then(result => {
+
+                                CorreoController.enviar('Nuevo usuario', model.correo, './plantillas_correo/nuevousuario', claves);
+                                resolve(result);
+                            })
+                            .catch(error => reject(error));
+                    }
                 })
                 .catch(error => reject(error));
         });
@@ -139,7 +148,7 @@ function UsuarioDAO() {
 
             const token = moment().format('DDMMYYYhhmmss');
 
-            Usuario.findOneAndUpdate({ correo: datos.correo }, { tokenRecupera: token })
+            Usuario.findOneAndUpdate({ correo: datos.correo.toLowerCase() }, { tokenRecupera: token })
                 .then((usuarioEncontrado) => {
 
                     if (usuarioEncontrado) {

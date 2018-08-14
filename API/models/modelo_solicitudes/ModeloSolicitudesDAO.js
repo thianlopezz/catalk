@@ -26,6 +26,16 @@ function ModeloSolicitudesDAO() {
         });
     }
 
+    this.getByKey = function (key) {
+
+        return new Promise((resolve, reject) => {
+
+            ModeloSoicitudes.findOne({ keyDialogflow: key })
+                .then(result => resolve(result))
+                .catch(error => reject(error));
+        });
+    }
+
     this.mantenimiento = function (accion, solicitud) {
 
         return new Promise((resolve, reject) => {

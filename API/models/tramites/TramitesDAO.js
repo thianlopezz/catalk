@@ -87,6 +87,43 @@ function TramitesDAO() {
         });
     }
 
+    this.getByKey = function (key) {
+
+        return new Promise((resolve, reject) => {
+
+            Tramites.findOne({ keyDialogflow: key })
+                .then(result => {
+
+                    // OBTENGO LOS MODELOS DE SOLICITUDES
+                    ModeloSolicitudesDAO.getAll()
+                        .then(modelos => {
+
+                            modelos = Object.assign([], modelos);
+                            // console.log(modelos);
+
+                            for (let i = 0; i < result.detalles.length; i++) {
+
+                                const modelo = modelos.find(x => '' + x._id === '' + result.detalles[i].idSolicitud);
+                                result.detalles[i].solicitud = modelo;
+                            }
+
+                            for (let i = 0; i < result.requisitos.length; i++) {
+
+                                const modelo = modelos.find(x => '' + x._id === '' + result.requisitos[i].idSolicitud);
+                                result.requisitos[i].solicitud = modelo;
+                            }
+
+                            resolve(result);
+                        })
+                        .catch(error => {
+                            console.log(error);
+                            resolve(result);
+                        });
+                })
+                .catch(error => reject(error));
+        });
+    }
+
     this.mantenimiento = function (accion, tramite) {
 
         return new Promise((resolve, reject) => {

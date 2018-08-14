@@ -9,6 +9,7 @@ const secret = 'catalk';
 const AdmisionesDAO = require('../models/admisiones/AdmisionesDAO');
 const ModeloSolicitudesDAO = require('../models/modelo_solicitudes/ModeloSolicitudesDAO');
 const TramitesDAO = require('../models/tramites/TramitesDAO');
+const ContadoresDAO = require('../models/contadores/ContadoresDAO');
 const ParametrosDAO = require('../models/parametros/ParametrosDAO');
 
 const UsuarioDAO = require('../models/usuario/UsuarioDAO');
@@ -154,14 +155,21 @@ router.post('/usuarios/:accion', (req, res) => {
 
   UsuarioDAO.mantenimiento(req.params.accion, req.body)
     .then(usuario => res.json({ success: true, data: usuario }))
-    .catch(error => res.send({ success: false, mensaje: error.message, error }))
+    .catch(error => res.send({ success: false, mensaje: error.message, error }));
 });
 
 router.post('/usuario/contrasena', (req, res) => {
 
   UsuarioDAO.contrasena(req.body)
     .then(usuario => res.json({ success: true, data: usuario }))
-    .catch(error => res.send({ success: false, mensaje: error.message, error }))
+    .catch(error => res.send({ success: false, mensaje: error.message, error }));
+});
+
+router.get('/estadisticas', (req, res) => {
+  
+  ContadoresDAO.getEstadistica()
+    .then(datos => res.json({ success: true, data: datos }))
+    .catch(error => res.send({ success: false, mensaje: error.message, error }));
 });
 
 module.exports = router;

@@ -1,5 +1,5 @@
 import { Component, OnInit, AfterViewInit } from '@angular/core';
-import { ActivatedRoute } from '../../../node_modules/@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { TramitesService } from '../tramites/tramites.service';
 import { SolicitudesService } from '../solicitudes/solicitudes.service';
 

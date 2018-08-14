@@ -1,5 +1,5 @@
 <div class="container">
-  <h2>Usuarios</h2>
+  <h4 class="center-align">Cambiar contraseña</h4>
   <app-list-usuarios *ngIf="estado==='lista'" [loading]="loadingUsuarios" [usuarios]="usuarios" (detalle)="onDetalle($event)"
     (editar)="onEditar($event)" (eliminar)="onEliminar($event)"></app-list-usuarios>
 

@@ -1,8 +1,8 @@
 <form name="form" (ngSubmit)="guardar(f)" #f="ngForm">
   <div class="row">
     <div class="input-field col s12">
-      <input id="correo" name="correo" type="text" class="validate" [ngClass]="{'invalid': f.submitted && !correo.valid }"
-        [(ngModel)]="model.correo" #correo="ngModel" required>
+      <input id="correo" name="correo" type="email" class="validate" [ngClass]="{'invalid': f.submitted && !correo.valid }"
+        [(ngModel)]="model.correo" #correo="ngModel" [email]="true" required>
       <label for="correo">Correo</label>
     </div>
   </div>

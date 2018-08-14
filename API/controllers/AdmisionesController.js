@@ -1,9 +1,9 @@
-// const URL_BASE = 'http://200.69.184.189:9001/';
-const URL_BASE = 'https://catalk.herokuapp.com/';
+const URL_BASE = require('../models/UrlConfig').URL_BASE;
 
 const moment = require('moment');
 
 const AdmisionesDAO = require('../models/admisiones/AdmisionesDAO');
+const ContadoresDAO = require('../models/contadores/ContadoresDAO');
 const CorreoController = require('../controllers/CorreoController');
 
 function AdmisionesController() {
@@ -16,26 +16,24 @@ function AdmisionesController() {
         console.log('Parameters>> ' + JSON.stringify(request.queryResult.parameters));
 
         switch (request.queryResult.action) {
-            case 'getTipoAdmisiones': getInfoBasicaAdmisiones(res); break;
-            case 'getInfoAdmision': getInfoAdmision(request.queryResult.parameters.tipoAdimisiones, res); break;
-            case 'enviaInfoAdmisionCorreo': enviaCorreo(request.queryResult.parameters.email, res); break;
-            default: getInfoBasicaAdmisiones(res);
+            case 'getInfoAdmisiones': getInfoAdmisiones(res); break;
+            case 'getInfoTipoAdmision': getInfoTipoAdmision(request.queryResult.parameters.tipoAdmisiones, res); break;
+            case 'enviaInfoAdmisiones': enviaInfoAdmisiones(request.queryResult.parameters.tipoAdmisiones, request.queryResult.parameters.email, res); break;
+            default: getInfoAdmisiones(res);
         }
     };
 
-    function enviaCorreo(correo, res) {
+    function enviaInfoAdmisiones(tipoAdmision, correo, res) {
 
         let respuestas = [];
 
-        AdmisionesDAO.getAll()
-            .then(tipoAdmisiones => {
+        AdmisionesDAO.getByKey(tipoAdmision)
+            .then(admision => {
 
                 let infoAdmision = '';
 
-                tipoAdmisiones.forEach(admision => {
-
-                    infoAdmision = infoAdmision +
-                        `
+                infoAdmision = infoAdmision +
+                    `
                 <h3 style="text-align: center; color: #a74f52; padding: .7rem;">
                     ${admision.tipoAdmision}
                 </h3>
@@ -46,7 +44,7 @@ function AdmisionesController() {
                             Valor
                         </td>
                         <td>
-                            ${'$' + admision.valor}
+                            ${'$' + admision.valor || 0}
                         </td>
                     </tr>
                     <tr>
@@ -54,7 +52,7 @@ function AdmisionesController() {
                             Fecha de inicio
                         </td>
                         <td>
-                            ${moment(admision.feInicio).format('DD[/]MM[/]YYYY')}
+                            ${admision.feInicio ? moment(admision.feInicio).format('DD[/]MM[/]YYYY') : 'Por definir'}
                         </td>
                     </tr>
                     <tr>
@@ -62,54 +60,91 @@ function AdmisionesController() {
                             Fecha de finalización
                         </td>
                         <td>
-                            ${moment(admision.feFin).format('DD[/]MM[/]YYYY')}
+                            ${admision.feFin ? moment(admision.feFin).format('DD[/]MM[/]YYYY') : 'Por definir'}
                         </td>
                     </tr>
                 </table>`;
 
-                    // ARMO DETALLES
-                    let detalles = `
+                // ARMO DETALLES
+                let detalles = `
                 <h4 style="color: #676767;">Detalles</h4>
                     <ul>
                 `;
 
-                    admision.detalles.forEach(detalle => {
+                admision.detalles.forEach(detalle => {
+
+                    if (!detalle.idSolicitud && !detalle.link) {
+
                         detalles = detalles
-                            + `<li>${detalle.descripcion}</li>`
-                    });
+                            + `<li>${detalle.descripcion}</li>`;
+                    } else if (detalle.link) { // TIPO LINK
 
-                    detalles = detalles + '</ul>';
+                        detalles = detalles
+                            + `<li>
+                            ${detalle.descripcion} 
+                            <a href="${detalle.link} ">ENLACE</a>
+                            </li>`;
+                    } else if (detalle.idSolicitud) { // TIPO MODELO SOLICITUD
 
-                    // ARMO REQUISITOS
-                    let requisitos = `
+                        detalles = detalles
+                            + `<li>
+                            ${detalle.descripcion} 
+                            <a href="${URL_BASE + 'solicitudes/ex/' + encodeURIComponent(detalle.idSolicitud)}">MODELO DE SOLICITUD</a>
+                            </li>`;
+
+                        console.log('/' + detalle.idSolicitud + '.');
+                    }
+                });
+
+                detalles = detalles + '</ul>';
+
+                // ARMO REQUISITOS
+                let requisitos = `
                 <h4 style="color: #676767;">Requisitos</h4>
                     <ul>
                 `;
 
-                    admision.requisitos.forEach(requisito => {
+                admision.requisitos.forEach(requisito => {
+
+                    if (!requisito.idSolicitud && !requisito.link) {
+
                         requisitos = requisitos
-                            + `<li>${requisito.descripcion}</li>`
-                    });
+                            + `<li>${requisito.descripcion}</li>`;
+                    } else if (requisito.link) { // TIPO LINK
 
-                    requisitos = requisitos + '</ul>';
+                        requisitos = requisitos
+                            + `<li>
+                            ${requisito.descripcion} 
+                            <a href="${requisito.link} ">ENLACE</a>
+                            </li>`;
+                    } else if (requisito.idSolicitud) { // TIPO MODELO SOLICITUD
 
-                    // AGREGO A INFOADMISION
-                    infoAdmision = infoAdmision + '' + detalles + '' + requisitos;
-
+                        requisitos = requisitos
+                            + `<li>
+                            ${requisito.descripcion} 
+                            <a href="${URL_BASE + 'solicitudes/ex/' + encodeURIComponent(requisito.idSolicitud)}">MODELO DE SOLICITUD</a>
+                            </li>`;
+                    }
                 });
 
-                // // DEFINIR RESERVADOS
-                // console.log('OJOOO DEFINIR TOKENS');
-                // let claves = '';
-                // claves = claves + 'infoAdmision&' + infoAdmision + '|';
-                // claves = claves + 'correoAdmin&' + 'ingenieria.ucsg@gmail.com' + '|';
+                requisitos = requisitos + '</ul>';
+
+                const linkToInfoAdmision = `<p style="text-align: center;">
+                    <a href="${URL_BASE + 'admisiones/ex/' + encodeURIComponent(admision._id)}">Más información</a>
+                </p>`
+
+                // AGREGO A INFOADMISION
+                infoAdmision = infoAdmision + '' + detalles + '' + requisitos + '' + linkToInfoAdmision;
 
                 const claves = {
                     infoAdmision
                 }
 
-                CorreoController.enviar('Información de admisiones', correo, './plantillas_correo/infoadmisiones', claves)
+                CorreoController.enviar('Información de admisiones - ' + admision.tipoAdmision, correo, './plantillas_correo/infoadmisiones', claves)
                     .then(() => {
+
+                        // DEJO HUELLA
+                        ContadoresDAO.insertar({ tipo: 'ADMISION', idTipo: admision._id, correo: correo });
 
                         respuestas.push({
                             text: {
@@ -144,19 +179,12 @@ function AdmisionesController() {
 
     }
 
-    function getInfoAdmision(key, res) {
-
-        // AQUI SE CAMBIA POR KEY UNICO DESDE LA BD
-        // if (key === 'examen.admision') {
-        //     key = '5b3424ca66fc60d3c466b655';
-        // } else if (key === 'curso.nivelacion') {
-        //     key = '5b353c33d4738f21ace9c131';
-        // }
+    function getInfoTipoAdmision(key, res) {
 
         getDetalleAdmision(key, res);
     }
 
-    function getInfoBasicaAdmisiones(res) {
+    function getInfoAdmisiones(res) {
 
         let respuestas = [];
 
@@ -181,6 +209,8 @@ function AdmisionesController() {
                     },
                 });
 
+                // DEJO HUELLA
+                ContadoresDAO.insertar({ tipo: 'ADMISIONES' });
 
                 return res.send({
                     fulfillmentMessages: respuestas
@@ -297,40 +327,84 @@ function AdmisionesController() {
                     },
                 });
 
+                // VALOR ADMISION
+                let objTextValor = {
+                    text: {
+                        text: [
+                            'No tiene valor alguno.'
+                        ],
+                    },
+                };
+
+                // EN CASO DE QUE TENGA VALOR
                 if (admision.valor) {
 
-                    respuestas.push({
+                    objTextValor = {
                         text: {
                             text: [
                                 'Tiene un valor de $' + admision.valor
                             ],
                         },
-                    });
+                    };
                 }
 
+                // AGREGO A LOS MENSAJES
+                respuestas.push(
+                    objTextValor
+                );
+
+                // FECHAS DE INICIO
+                let objTextFeIni = {
+                    text: {
+                        text: [
+                            'Aún no se define la fecha inicio.'
+                        ],
+                    },
+                };
+
+                // EN CASO DE QUE TENGA FECHA DE INICIO DEFINIDA
                 if (admision.feInicio) {
 
-                    respuestas.push({
+                    objTextFeIni = {
                         text: {
                             text: [
                                 'Inicia el ' + moment(admision.feInicio).format('DD[/]MM[/]YYYY')
                             ],
                         },
-                    });
+                    };
                 }
+
+                // AGREGO A LOS MENSAJES
+                respuestas.push(
+                    objTextFeIni
+                );
+
+                // FECHAS DE FIN
+                let objTextFeFin = {
+                    text: {
+                        text: [
+                            'Aún no se define la fecha de finalización.'
+                        ],
+                    },
+                };
 
                 if (admision.feFin) {
 
                     let prefix = (admision.feInicio) ? 'Y finaliza' : 'Finaliza'
 
-                    respuestas.push({
+                    objTextFeFin = {
                         text: {
                             text: [
                                 prefix + ' el ' + moment(admision.feFin).format('DD[/]MM[/]YYYY')
                             ],
                         },
-                    });
+                    };
                 }
+
+                // AGREGO A LOS MENSAJES
+                respuestas.push(
+                    objTextFeFin
+                );
 
                 // SELECCIONAMOS LOS 3 PRIMEROS
                 let detallesLength = admision.detalles.length;
@@ -341,41 +415,27 @@ function AdmisionesController() {
 
                 for (let i = 0; i < detallesLength; i++) {
 
-                    let text;
+                    let text = '';
 
                     // TIPO DESCRIPCION
                     if (!admision.detalles[i].idSolicitud && !admision.detalles[i].link) {
 
-                        text = {
-                            text: {
-                                text: [
-                                    admision.detalles[i].descripcion
-                                ],
-                            }
-                        };
+                        text = text + '' + admision.detalles[i].descripcion + '\n';
                     } else if (admision.detalles[i].link) { // TIPO LINK
 
-                        text = {
-                            text: {
-                                text: [
-                                    admision.detalles[i].descripcion,
-                                    admision.detalles[i].link
-                                ],
-                            }
-                        };
+                        text = text + '' + admision.detalles[i].descripcion + ' ' + admision.detalles[i].link + '\n';
                     } else if (admision.detalles[i].idSolicitud) { // TIPO MODELO SOLICITUD
 
-                        text = {
-                            text: {
-                                text: [
-                                    admision.detalles[i].descripcion,
-                                    URL_BASE + 'solicitudes/ex/' + admision.detalles[i].idSolicitud
-                                ],
-                            }
-                        };
+                        text = text + '' + admision.detalles[i].descripcion + ' ' + URL_BASE + 'solicitudes/ex/' + admision.detalles[i].idSolicitud + '\n';
                     }
 
-                    respuestas.push(text);
+                    respuestas.push(text = {
+                        text: {
+                            text: [
+                                text
+                            ],
+                        }
+                    });
                 }
 
                 respuestas.push({
@@ -385,6 +445,9 @@ function AdmisionesController() {
                         ],
                     },
                 });
+
+                // DEJO HUELLA
+                ContadoresDAO.insertar({ tipo: 'ADMISIONES', idTipo: admision._id });
 
                 return res.send({
                     fulfillmentMessages: respuestas

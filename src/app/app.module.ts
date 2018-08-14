@@ -1,5 +1,5 @@
 import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
+import { NgModule, ErrorHandler } from '@angular/core';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClientModule } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
@@ -49,6 +49,15 @@ import { FormContrasenaComponent } from './usuarios/form-contrasena/form-contras
 import { GenericoComponent } from './generico/generico.component';
 import { OlvideContrasenaComponent } from './generico/olvide-contrasena/olvide-contrasena.component';
 import { RecuperaContrasenaComponent } from './generico/recupera-contrasena/recupera-contrasena.component';
+import { EstadisticasComponent } from './estadisticas/estadisticas.component';
+import { CardEstadisticaBarrasComponent } from './estadisticas/card-estadistica-barras/card-estadistica-barras.component';
+import { CardEstadisticaLineasComponent } from './estadisticas/card-estadistica-lineas/card-estadistica-lineas.component';
+import { AuthErrorHandler } from './login/auth-error-handler';
+import { EstadisticasService } from './estadisticas/estadisticas.service';
+import { TramitesService } from './tramites/tramites.service';
+import { SolicitudesService } from './solicitudes/solicitudes.service';
+import { UsuariosService } from './usuarios/usuarios.service';
+import { ParametrosService } from './parametros/parametros.service';
 
 @NgModule({
   declarations: [
@@ -92,7 +101,10 @@ import { RecuperaContrasenaComponent } from './generico/recupera-contrasena/recu
     FormContrasenaComponent,
     GenericoComponent,
     OlvideContrasenaComponent,
-    RecuperaContrasenaComponent
+    RecuperaContrasenaComponent,
+    EstadisticasComponent,
+    CardEstadisticaBarrasComponent,
+    CardEstadisticaLineasComponent
   ],
   imports: [
     BrowserModule,
@@ -102,7 +114,18 @@ import { RecuperaContrasenaComponent } from './generico/recupera-contrasena/recu
     HttpModule,
     routing
   ],
-  providers: [SessionService, AdmisionesService],
+  providers: [
+    SessionService,
+    AdmisionesService,
+    TramitesService,
+    SolicitudesService,
+    UsuariosService,
+    ParametrosService,
+    EstadisticasService,
+    {
+      provide: ErrorHandler,
+      useClass: AuthErrorHandler
+    }],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

@@ -1,115 +1,132 @@
-// const URL_BASE = 'http://200.69.184.189:9001/';
-const URL_BASE = 'https://catalk.herokuapp.com/';
-
-const moment = require('moment');
+const URL_BASE = require('../models/UrlConfig').URL_BASE;
 
 const TramitesDAO = require('../models/tramites/TramitesDAO');
+const ContadoresDAO = require('../models/contadores/ContadoresDAO');
 const CorreoController = require('../controllers/CorreoController');
 
-function AdmisionesController() {
+function TramitesController() {
 
     this.mapAction = function (request, res) {
 
-        console.log('<<##TramiesController##>>');
+        console.log('<<##TramitesController##>>');
         console.log('Intent>> ' + request.queryResult.intent.displayName);
         console.log('Action>> ' + request.queryResult.action);
         console.log('Parameters>> ' + JSON.stringify(request.queryResult.parameters));
 
         switch (request.queryResult.action) {
-            case 'getTipoAdmisiones': getInfoBasicaAdmisiones(res); break;
-            case 'getInfoAdmision': getInfoAdmision(request.queryResult.parameters.tipoAdimisiones, res); break;
-            case 'enviaInfoAdmisionCorreo': enviaCorreo(request.queryResult.parameters.email, res); break;
-            default: getInfoBasicaAdmisiones(res);
+            case 'getInfoTramites': getInfoTramites(res); break;
+            case 'getInfoTipoTramite': getInfoTipoTramite(request.queryResult.parameters.tipoTramite, res); break;
+            case 'enviaInfoTramites': enviaInfoTramites(request.queryResult.parameters.tipoTramite, request.queryResult.parameters.email, res); break;
+            default: getInfoTramites(res);
         }
     };
 
-    function enviaCorreo(correo, res) {
+    function enviaInfoTramites(tipoTramite, correo, res) {
 
         let respuestas = [];
 
-        AdmisionesDAO.getAll()
-            .then(tipoAdmisiones => {
+        TramitesDAO.getByKey(tipoTramite)
+            .then(tramite => {
 
-                let infoAdmision = '';
+                let infoTramite = '';
 
-                tipoAdmisiones.forEach(admision => {
-
-                    infoAdmision = infoAdmision +
-                        `
+                infoTramite = infoTramite +
+                    `
                 <h3 style="text-align: center; color: #a74f52; padding: .7rem;">
-                    ${admision.tipoAdmision}
+                    ${tramite.tramite}
                 </h3>
-                <p>${admision.descripcion}</p>
+                <p>${tramite.descripcion}</p>
                 <table style="width: 100%;">
                     <tr>
                         <td>
                             Valor
                         </td>
                         <td>
-                            ${'$' + admision.valor}
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            Fecha de inicio
-                        </td>
-                        <td>
-                            ${moment(admision.feInicio).format('DD[/]MM[/]YYYY')}
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            Fecha de finalización
-                        </td>
-                        <td>
-                            ${moment(admision.feFin).format('DD[/]MM[/]YYYY')}
+                            ${'$' + tramite.valor || 0}
                         </td>
                     </tr>
                 </table>`;
 
-                    // ARMO DETALLES
-                    let detalles = `
+                // ARMO DETALLES
+                let detalles = `
                 <h4 style="color: #676767;">Detalles</h4>
                     <ul>
                 `;
 
-                    admision.detalles.forEach(detalle => {
+                tramite.detalles.forEach(detalle => {
+
+                    if (!detalle.idSolicitud && !detalle.link) {
+
                         detalles = detalles
-                            + `<li>${detalle.descripcion}</li>`
-                    });
+                            + `<li>${detalle.descripcion}</li>`;
+                    } else if (detalle.link) { // TIPO LINK
 
-                    detalles = detalles + '</ul>';
+                        detalles = detalles
+                            + `<li>
+                            ${detalle.descripcion} 
+                            <a href="${detalle.link} ">ENLACE</a>
+                            </li>`;
+                    } else if (detalle.idSolicitud) { // TIPO MODELO SOLICITUD
 
-                    // ARMO REQUISITOS
-                    let requisitos = `
+                        detalles = detalles
+                            + `<li>
+                            ${detalle.descripcion} 
+                            <a href="${URL_BASE + 'solicitudes/ex/' + encodeURIComponent(detalle.idSolicitud)}">MODELO DE SOLICITUD</a>
+                            </li>`;
+
+                        console.log('/' + detalle.idSolicitud + '.');
+                    }
+                });
+
+                detalles = detalles + '</ul>';
+
+                // ARMO REQUISITOS
+                let requisitos = `
                 <h4 style="color: #676767;">Requisitos</h4>
                     <ul>
                 `;
 
-                    admision.requisitos.forEach(requisito => {
+                tramite.requisitos.forEach(requisito => {
+
+                    if (!requisito.idSolicitud && !requisito.link) {
+
                         requisitos = requisitos
-                            + `<li>${requisito.descripcion}</li>`
-                    });
+                            + `<li>${requisito.descripcion}</li>`;
+                    } else if (requisito.link) { // TIPO LINK
 
-                    requisitos = requisitos + '</ul>';
+                        requisitos = requisitos
+                            + `<li>
+                            ${requisito.descripcion} 
+                            <a href="${requisito.link} ">ENLACE</a>
+                            </li>`;
+                    } else if (requisito.idSolicitud) { // TIPO MODELO SOLICITUD
 
-                    // AGREGO A INFOADMISION
-                    infoAdmision = infoAdmision + '' + detalles + '' + requisitos;
-
+                        requisitos = requisitos
+                            + `<li>
+                            ${requisito.descripcion} 
+                            <a href="${URL_BASE + 'solicitudes/ex/' + encodeURIComponent(requisito.idSolicitud)}">MODELO DE SOLICITUD</a>
+                            </li>`;
+                    }
                 });
 
-                // // DEFINIR RESERVADOS
-                // console.log('OJOOO DEFINIR TOKENS');
-                // let claves = '';
-                // claves = claves + 'infoAdmision&' + infoAdmision + '|';
-                // claves = claves + 'correoAdmin&' + 'ingenieria.ucsg@gmail.com' + '|';
+                requisitos = requisitos + '</ul>';
+
+                const linkToInfoAdmision = `<p style="text-align: center;">
+                    <a href="${URL_BASE + 'tramites/ex/' + encodeURIComponent(tramite._id)}">Más información</a>
+                </p>`
+
+                // AGREGO A INFOADMISION
+                infoTramite = infoTramite + '' + detalles + '' + requisitos + '' + linkToInfoAdmision;
 
                 const claves = {
-                    infoAdmision
+                    infoTramite
                 }
 
-                CorreoController.enviar('Información de admisiones', correo, './plantillas_correo/infoadmisiones', claves)
+                CorreoController.enviar('Información de trámites - ' + tramite.tramite, correo, './plantillas_correo/infotramites', claves)
                     .then(() => {
+
+                        // DEJO HUELLA
+                        ContadoresDAO.insertar({ tipo: 'TRAMITES', idTipo: tramite._id, correo: correo });
 
                         respuestas.push({
                             text: {
@@ -144,34 +161,26 @@ function AdmisionesController() {
 
     }
 
-    function getInfoAdmision(key, res) {
-
-        // AQUI SE CAMBIA POR KEY UNICO DESDE LA BD
-        // if (key === 'examen.admision') {
-        //     key = '5b3424ca66fc60d3c466b655';
-        // } else if (key === 'curso.nivelacion') {
-        //     key = '5b353c33d4738f21ace9c131';
-        // }
-
-        getDetalleAdmision(key, res);
+    function getInfoTipoTramite(key, res) {
+        getDetalleTramite(key, res);
     }
 
-    function getInfoBasicaAdmisiones(res) {
+    function getInfoTramites(res) {
 
         let respuestas = [];
 
-        AdmisionesDAO.getAll()
-            .then(tipoAdmisiones => {
+        TramitesDAO.getAll()
+            .then(tramites => {
 
                 respuestas.push({
                     text: {
                         text: [
-                            'Tenemos', '' + tipoAdmisiones.length, 'tipos de admisiones'
+                            'Tenemos', '' + tramites.length, 'tipos de trámites'
                         ],
                     },
                 });
 
-                respuestas = respuestas.concat(getTipoAdmisiones(tipoAdmisiones, 'CARTA'));
+                respuestas = respuestas.concat(getTipoTramites(tramites, 'CARTA'));
 
                 respuestas.push({
                     text: {
@@ -181,6 +190,8 @@ function AdmisionesController() {
                     },
                 });
 
+                // DEJO HUELLA
+                ContadoresDAO.insertar({ tipo: 'TRAMITES' });
 
                 return res.send({
                     fulfillmentMessages: respuestas
@@ -206,22 +217,22 @@ function AdmisionesController() {
 
     // AUXILIARES
 
-    function getTipoAdmisiones(tipoAdmisiones, tipo) {
+    function getTipoTramites(tramites, tipo) {
 
         let respuestas = [];
 
         if (tipo === 'CARTA') {
 
-            tipoAdmisiones.forEach(admision => {
+            tramites.forEach(tramite => {
                 respuestas.push({
                     card: {
-                        title: admision.tipoAdmision,
-                        subtitle: admision.descripcion,
+                        title: tramite.tramite,
+                        subtitle: tramite.descripcion,
                         imageUri: URL_BASE + 'assets/images/admisiones.png',
                         buttons: [
                             {
                                 text: "Saber más",
-                                postback: URL_BASE + 'admisiones/ex/' + admision._id
+                                postback: URL_BASE + 'tramites/ex/' + tramite._id
                             }
                         ]
                     }
@@ -234,7 +245,7 @@ function AdmisionesController() {
                 items: []
             }
 
-            tipoAdmisiones.forEach(admision => {
+            tramites.forEach(admision => {
                 listSelect.items.push({
                     "info": {
                         "key": "key1",
@@ -268,7 +279,7 @@ function AdmisionesController() {
             respuestas.push({ listSelect });
         } else {
 
-            tipoAdmisiones.forEach(admision => {
+            tramites.forEach(admision => {
                 respuestas.push({
                     text: {
                         text: [
@@ -282,58 +293,49 @@ function AdmisionesController() {
         return respuestas;
     }
 
-    function getDetalleAdmision(key, res) {
+    function getDetalleTramite(key, res) {
 
         let respuestas = [];
 
-        AdmisionesDAO.getByKey(key)
-            .then(admision => {
+        TramitesDAO.getByKey(key)
+            .then(tramite => {
 
                 respuestas.push({
                     text: {
                         text: [
-                            admision.tipoAdmision
+                            tramite.tramite
                         ],
                     },
                 });
 
-                if (admision.valor) {
+                // VALOR ADMISION
+                let objTextValor = {
+                    text: {
+                        text: [
+                            'No tiene valor alguno.'
+                        ],
+                    },
+                };
 
-                    respuestas.push({
+                // EN CASO DE QUE TENGA VALOR
+                if (tramite.valor) {
+
+                    objTextValor = {
                         text: {
                             text: [
-                                'Tiene un valor de $' + admision.valor
+                                'Tiene un valor de $' + tramite.valor
                             ],
                         },
-                    });
+                    };
                 }
 
-                if (admision.feInicio) {
-
-                    respuestas.push({
-                        text: {
-                            text: [
-                                'Inicia el ' + moment(admision.feInicio).format('DD[/]MM[/]YYYY')
-                            ],
-                        },
-                    });
-                }
-
-                if (admision.feFin) {
-
-                    let prefix = (admision.feInicio) ? 'Y finaliza' : 'Finaliza'
-
-                    respuestas.push({
-                        text: {
-                            text: [
-                                prefix + ' el ' + moment(admision.feFin).format('DD[/]MM[/]YYYY')
-                            ],
-                        },
-                    });
-                }
+                // AGREGO A LOS MENSAJES
+                respuestas.push(
+                    objTextValor
+                );
 
                 // SELECCIONAMOS LOS 3 PRIMEROS
-                let detallesLength = admision.detalles.length;
+                let detallesLength = tramite.detalles.length;
 
                 if (detallesLength > 3) {
                     detallesLength = 3;
@@ -341,41 +343,27 @@ function AdmisionesController() {
 
                 for (let i = 0; i < detallesLength; i++) {
 
-                    let text;
+                    let text = '';
 
                     // TIPO DESCRIPCION
-                    if (!admision.detalles[i].idSolicitud && !admision.detalles[i].link) {
+                    if (!tramite.detalles[i].idSolicitud && !tramite.detalles[i].link) {
 
-                        text = {
-                            text: {
-                                text: [
-                                    admision.detalles[i].descripcion
-                                ],
-                            }
-                        };
-                    } else if (admision.detalles[i].link) { // TIPO LINK
+                        text = text + '' + tramite.detalles[i].descripcion + '\n';
+                    } else if (tramite.detalles[i].link) { // TIPO LINK
 
-                        text = {
-                            text: {
-                                text: [
-                                    admision.detalles[i].descripcion,
-                                    admision.detalles[i].link
-                                ],
-                            }
-                        };
-                    } else if (admision.detalles[i].idSolicitud) { // TIPO MODELO SOLICITUD
+                        text = text + '' + tramite.detalles[i].descripcion + ' ' + tramite.detalles[i].link + '\n';
+                    } else if (tramite.detalles[i].idSolicitud) { // TIPO MODELO SOLICITUD
 
-                        text = {
-                            text: {
-                                text: [
-                                    admision.detalles[i].descripcion,
-                                    URL_BASE + 'solicitudes/ex/' + admision.detalles[i].idSolicitud
-                                ],
-                            }
-                        };
+                        text = text + '' + tramite.detalles[i].descripcion + ' ' + URL_BASE + 'tramites/ex/' + tramite.detalles[i].idSolicitud + '\n';
                     }
 
-                    respuestas.push(text);
+                    respuestas.push(text = {
+                        text: {
+                            text: [
+                                text
+                            ],
+                        }
+                    });
                 }
 
                 respuestas.push({
@@ -385,6 +373,9 @@ function AdmisionesController() {
                         ],
                     },
                 });
+
+                // DEJO HUELLA
+                ContadoresDAO.insertar({ tipo: 'TRAMITES', idTipo: tramite._id });
 
                 return res.send({
                     fulfillmentMessages: respuestas
@@ -409,4 +400,4 @@ function AdmisionesController() {
     }
 }
 
-module.exports = new AdmisionesController();
+module.exports = new TramitesController();

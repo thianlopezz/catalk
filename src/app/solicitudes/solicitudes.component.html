@@ -1,6 +1,5 @@
 <div class="container">
-  <h2>Modelo de solicitudes</h2>
-
+  <h4 class="center-align">Modelo de solicitudes</h4>
   <app-list-solicitudes *ngIf="estado==='lista'" [loading]="loadingSolicitudes" [solicitudes]="solicitudes" (detalle)="onDetalle($event)"
     (editar)="onEditar($event)" (eliminar)="onEliminar($event)"></app-list-solicitudes>
 
