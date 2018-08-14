@@ -1,5 +1,4 @@
 export class ChartOp {
-
     data: any = {
         labels: [],
         datasets: []
@@ -15,5 +14,4 @@ export class ChartOp {
         this.data = data;
         this.options = options;
     }
-
 }

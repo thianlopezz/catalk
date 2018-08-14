@@ -1,7 +1,7 @@
 import { Component, OnInit, OnChanges, SimpleChanges, ViewChild, Input, ElementRef } from '@angular/core';
 
 import Chart from 'chart.js';
-import { ChartOp } from 'src/app/models/chartop';
+import { ChartOp } from '../../models/chart-op';
 
 @Component({
   selector: 'app-card-estadistica-barras',
