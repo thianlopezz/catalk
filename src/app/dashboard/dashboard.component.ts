@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 
 import * as moment from 'moment';
-import { ChartOp } from '../models/chartop';
 import { EstadisticasService } from '../estadisticas/estadisticas.service';
+import { ChartOp } from '../models/chartop';
 
 declare var jQuery: any;
 
