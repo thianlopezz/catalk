@@ -23,4 +23,9 @@ export class CardAdmisionDetalleComponent implements OnInit, AfterViewInit {
     jQuery('.tooltipped').tooltip();
   }
 
+  edit() {
+
+  }
+
+
 }
