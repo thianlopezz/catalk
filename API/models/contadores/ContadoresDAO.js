@@ -27,12 +27,16 @@ function ContadoresDAO() {
             async.parallel({
                 generalPorMes: getGeneralPorMes,
                 tipoAdmisionesPorMes: getTipoAdmisionesPorMes,
-                tipoModelosPorMes: getTipoModelosPorMes,
                 tipoTramitesPorMes: getTipoTramitesPorMes,
+                tipoModelosPorMes: getTipoModelosPorMes,
 
                 correosAdmisionesPorMes: getCorreosAdmisionesPorMes,
+                correosTramitesPorMes: getCorreosTramitesPorMes,
                 correosModelosPorMes: getCorreosModelosPorMes,
-                correosTramitesPosMes: getCorreosTramitesPorMes   
+
+                admisiones: getAdmisiones,
+                tramites: getTramites,
+                modelos: getSolicitudes,
             },
                 // optional callback
                 function (error, results) {
@@ -316,6 +320,25 @@ function ContadoresDAO() {
 
             callback(null, registros);
         });
+    }
+
+    // PARA OBTENER CATALOGOS
+    function getAdmisiones(callback) {
+        AdmisionesDAO.getAll()
+            .then(admisiones => callback(null, admisiones))
+            .catch(error => callback(error));
+    }
+
+    function getTramites(callback) {
+        TramitesDAO.getAll()
+            .then(tramites => callback(null, tramites))
+            .catch(error => callback(error));
+    }
+
+    function getSolicitudes(callback) {
+        ModeloSolicitudesDAO.getAll()
+            .then(modelos => callback(null, modelos))
+            .catch(error => callback(error));
     }
 }
 

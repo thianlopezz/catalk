@@ -22,9 +22,10 @@ export class HeaderComponent implements OnInit, AfterViewInit, AfterViewChecked 
 
   ngAfterViewInit() {
 
-    jQuery('.button-collapse').sidenav();
+    // jQuery('.button-collapse').sidenav();
     jQuery('.tooltipped').tooltip({ delay: 50 });
     jQuery('.dropdown-trigger').dropdown();
+    jQuery('.sidenav').sidenav();
     this.usuario = this.sessionService.getSession();
   }
 

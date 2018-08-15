@@ -228,7 +228,7 @@ function TramitesController() {
                     card: {
                         title: tramite.tramite,
                         subtitle: tramite.descripcion,
-                        imageUri: URL_BASE + 'assets/images/admisiones.png',
+                        imageUri: URL_BASE + 'assets/images/tramites.png',
                         buttons: [
                             {
                                 text: "Saber más",

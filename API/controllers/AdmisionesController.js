@@ -144,7 +144,7 @@ function AdmisionesController() {
                     .then(() => {
 
                         // DEJO HUELLA
-                        ContadoresDAO.insertar({ tipo: 'ADMISION', idTipo: admision._id, correo: correo });
+                        ContadoresDAO.insertar({ tipo: 'ADMISIONES', idTipo: admision._id, correo: correo });
 
                         respuestas.push({
                             text: {

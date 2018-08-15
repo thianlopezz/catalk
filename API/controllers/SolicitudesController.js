@@ -153,7 +153,7 @@ function SolicitudesController() {
                     card: {
                         title: solicitud.solicitud,
                         subtitle: solicitud.descripcion,
-                        imageUri: URL_BASE + 'assets/images/admisiones.png',
+                        imageUri: URL_BASE + 'assets/images/modelos.png',
                         buttons: [
                             {
                                 text: "Saber más",

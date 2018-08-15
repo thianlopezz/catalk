@@ -1,4 +1,5 @@
 import { Component, OnInit, Input, AfterViewInit } from '@angular/core';
+import { Router } from '../../../../node_modules/@angular/router';
 
 declare var jQuery: any;
 
@@ -14,7 +15,7 @@ export class CardTramiteDetalleComponent implements OnInit, AfterViewInit {
 
   @Input() botonera = false;
 
-  constructor() { }
+  constructor(private router: Router) { }
 
   ngOnInit() {
   }
@@ -23,4 +24,8 @@ export class CardTramiteDetalleComponent implements OnInit, AfterViewInit {
     jQuery('.tooltipped').tooltip();
   }
 
+  edit() {
+
+    this.router.navigate(['/tramites', this.tramite._id, 'edit']);
+  }
 }

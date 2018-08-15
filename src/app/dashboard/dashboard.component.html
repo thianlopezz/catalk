@@ -3,7 +3,7 @@
     <div class="card">
       <div class="card-content">
         <span class="card-title">Bienvenido,</span>
-        <p>a la consola administrativa de chatbot de la carrera de Ingeniería en Computación, de la Universidad Católica de Santiago de Guayaqui.</p>
+        <p>a la consola administrativa de chatbot de la carrera de Ingeniería en Computación, de la Universidad Católica de Santiago de Guayaquil.</p>
       </div>
     </div>
     <app-card-estadistica-barras [titulo]="'Consultas realizadas'" [chart_op]="chart"></app-card-estadistica-barras>
@@ -30,10 +30,6 @@
             <span class="card-title">Trámites</span>
             <p>Ingresa, modifica o elimina los diferentes trámites.</p>
           </div>
-          <!-- <div class="card-action">
-                  <a href="#">This is a link</a>
-                  <a href="#">This is a link</a>
-                </div> -->
         </div>
       </div>
       <div class="col s12 m12">
@@ -42,10 +38,6 @@
             <span class="card-title">Modelo de solicitudes</span>
             <p>Ingresa, modifica o elimina los diferentes modelos de solicitudes.</p>
           </div>
-          <!-- <div class="card-action">
-                        <a href="#">This is a link</a>
-                        <a href="#">This is a link</a>
-                      </div> -->
         </div>
       </div>
       <div class="col s12 m12">
@@ -54,10 +46,14 @@
             <span class="card-title">Usuarios</span>
             <p>Ingresa, modifica o elimina los usuarios del sistema.</p>
           </div>
-          <!-- <div class="card-action">
-                              <a href="#">This is a link</a>
-                              <a href="#">This is a link</a>
-                            </div> -->
+        </div>
+      </div>
+      <div class="col s12 m12">
+        <div class="card hoverable" [routerLink]="['/estadisticas']">
+          <div class="card-content">
+            <span class="card-title">Seguimiento</span>
+            <p>Realiza seguimientos de correos o revisa estadísticas analíticas del sistema.</p>
+          </div>
         </div>
       </div>
       <div class="col s12 m12">
@@ -66,10 +62,6 @@
             <span class="card-title">Parámetros de configuración</span>
             <p>Modifica los parámetros de configuración del sistema.</p>
           </div>
-          <!-- <div class="card-action">
-                                    <a href="#">This is a link</a>
-                                    <a href="#">This is a link</a>
-                                  </div> -->
         </div>
       </div>
     </div>

@@ -1,3 +1,86 @@
-<p>
-  estadisticas works!
-</p>
+<br>
+<section class="filtro-fecha">
+  <div class="row">
+    <div class="input-field col s12 m2 offset-m2">
+      <h4>Filtro</h4>
+    </div>
+    <div class="input-field col s12 m2">
+      <input id="feDesde" type="text" class="datepicker validate" required>
+      <label for="feDesde">Fecha desde</label>
+    </div>
+    <div class="input-field col s12 m2">
+      <input id="feHasta" type="text" class="datepicker validate">
+      <label for="feHasta">Fecha hasta</label>
+    </div>
+  </div>
+</section>
+<section>  
+  <div class="row">
+    <div class="col s12 m8 offset-m2">
+      <h4>General</h4>
+      <app-card-estadistica-barras [titulo]="'Consultas realizadas'" [chart_op]="chartOpGeneralPorMes"></app-card-estadistica-barras>
+    </div>
+  </div>
+</section>
+<section class="mx-4 principal">
+  <div class="row">
+    <h4>Por tipo de consulta</h4>
+    <div class="col s12 m6">
+      <app-card-estadistica-barras [titulo]="'Consultas realizadas de tipo admisión'" [chart_op]="chartOpAdmisionesPorMes"></app-card-estadistica-barras>
+    </div>
+    <div class="col s12 m6">
+      <app-card-estadistica-barras [titulo]="'Consultas realizadas de tipo trámite'" [chart_op]="chartOpTramitesPorMes"></app-card-estadistica-barras>
+    </div>
+    <div class="col s12 m6">
+      <app-card-estadistica-barras [titulo]="'Consultas realizadas de tipo modelo de solicitudes'" [chart_op]="chartOpModelosPorMes"></app-card-estadistica-barras>
+    </div>
+  </div>
+</section>
+<section class="mx-4 correo">  
+  <div class="row">
+    <h4>Correos enviados</h4>
+    <div class="col s12 m7">
+      <app-card-estadistica-barras [titulo]="'Correos enviados por admisiones'" [chart_op]="chartOpCorreosAdmisionesPorMes"></app-card-estadistica-barras>
+      <app-card-estadistica-barras [titulo]="'Correos enviados por trámites'" [chart_op]="chartOpCorreosTramitesPorMes"></app-card-estadistica-barras>
+      <app-card-estadistica-barras [titulo]="'Correos enviados por modelo de solicitudes'" [chart_op]="chartOpCorreosModelosPorMes"></app-card-estadistica-barras>
+    </div>
+    <div class="col s12 m5">
+      <div class="row">
+        <div class="col m12">
+          <table class="responsive-table highlight">
+            <thead>
+              <tr>
+                <th>No</th>
+                <th>Tipo de correo</th>
+                <th>Correo</th>
+              </tr>
+            </thead>          
+            <tbody>
+              <tr>
+                <td>1</td>
+                <td>Curso de admisión</td>
+                <td>
+                  <a href="mailto:thianlopezz@gmail.com?subject=Seguimiento">thianlopezz@gmail.com</a>
+                </td>
+              </tr>
+              <tr>
+                <td>2</td>
+                <td>Curso de admisión</td>
+                <td>
+                  <a href="mailto:thianlopezz@gmail.com?subject=Seguimiento">thianlopezz@gmail.com</a>
+                </td>
+              </tr><tr>
+                <td>3</td>
+                <td>Curso de admisión</td>
+                <td>
+                  <a href="mailto:thianlopezz@gmail.com?subject=Seguimiento">thianlopezz@gmail.com</a>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

@@ -1,77 +1,100 @@
-<nav>
-  <div class="nav-wrapper">
-    <a [routerLink]="['/']" class="brand-logo">
-      <!-- <img style="margin-left: 1rem;" src="/assets/images/logo_header_300x300.svg" width="130px" height="130px" alt="dcristhi"> -->
-      Catalk
-    </a>
-    <a [routerLink]="" data-target="ul-mobile" class="sidenav-trigger">
-      <i class="material-icons">menu</i>
-    </a>
+<div class="nav-bar-fixed">
+  <nav>
+    <div class="nav-wrapper">
+      <a [routerLink]="['/']" class="brand-logo">
+        <img style="margin-left: 1rem;" src="/assets/images/ucsg_solo150x150.svg" width="58px" alt="cato">
+      </a>
+      <!-- NO SESSION -->
+      <a [hidden]="usuario" [routerLink]="" data-target="ul-mobile" class="sidenav-trigger">
+        <i class="material-icons">menu</i>
+      </a>
+      <!-- SESSION -->
+      <a [hidden]="!usuario" [routerLink]="" data-target="ul-mobile0" class="sidenav-trigger">
+        <i class="material-icons">menu</i>
+      </a>
 
-    <!-- NO SESSION -->
-    <div [hidden]="usuario">
-      <ul id="nav-mobile" style="margin-right: .7rem;" class="right hide-on-med-and-down">
-        <li>
-          <a [routerLink]="['/login']">
-            Login
-            <i class="material-icons right">person_pin</i>
-          </a>
-        </li>
-      </ul>
-      <ul class="sidenav" id="ul-mobile">
-        <li>
-          <a [routerLink]="['/login']">
-            Login
-            <i class="material-icons right">person_pin</i>
-          </a>
-        </li>
-      </ul>
-    </div>
+      <!-- NO SESSION -->
+      <div [hidden]="usuario">
+        <ul id="nav-mobile" style="margin-right: .7rem;" class="right hide-on-med-and-down">
+          <li>
+            <a [routerLink]="['/login']">
+              Login
+              <i class="material-icons right">person_pin</i>
+            </a>
+          </li>
+        </ul>
+        <ul class="sidenav" id="ul-mobile">
+          <li>
+            <a [routerLink]="['/login']">
+              Login
+              <i class="material-icons right">person_pin</i>
+            </a>
+          </li>
+        </ul>
+      </div>
 
-    <!-- SESSION -->
-    <div [hidden]="!usuario">
-      <ul id="nav-mobile" style="margin-right: .7rem;" class="right hide-on-med-and-down">
-        <li>
-          <a [routerLink]="['/ds']">Dashboard
-            <i class="material-icons right">dashboard</i>
-          </a>
-        </li>
-        <li>
-          <!-- Dropdown Trigger -->
-          <a class="dropdown-trigger center-align" style="MIN-WIDTH: 15rem;" [routerLink]="" data-target="dropdown1">
-            <span *ngIf="usuario">
-              {{usuario.nombre + ' ' + usuario.apellido}}               
+      <!-- SESSION -->
+      <div [hidden]="!usuario">
+        <ul id="nav-mobile" style="margin-right: .7rem;" class="right hide-on-med-and-down">
+          <li>
+            <a [routerLink]="['/ds']">Dashboard
+              <i class="material-icons right">dashboard</i>
+            </a>
+          </li>
+          <li>
+            <!-- Dropdown Trigger -->
+            <a class="dropdown-trigger center-align" style="MIN-WIDTH: 15rem;" [routerLink]="" data-target="dropdown1">
+              <span *ngIf="usuario">
+                {{usuario.nombre + ' ' + usuario.apellido}}
+                <i class="material-icons right">account_circle</i>
+              </span>
+            </a>
+            <!-- Dropdown Structure -->
+            <ul id="dropdown1" class="dropdown-content">
+              <li>
+                <a [routerLink]="['usuario','contrasena']">
+                  Cambiar contraseña
+                  <i class="material-icons right">lock</i>
+                </a>
+              </li>
+              <li class="divider"></li>
+              <li>
+                <a [routerLink]="" (click)="logOut()">
+                  Cerrar sesión
+                  <i class="material-icons right">power_settings_new</i>
+                </a>
+              </li>
+            </ul>
+          </li>
+        </ul>
+        <ul class="sidenav" id="ul-mobile0">
+          <li>
+            <a *ngIf="usuario" [routerLink]="">
+               {{usuario.nombre + ' ' + usuario.apellido}}
               <i class="material-icons right">account_circle</i>
-            </span>             
-          </a>
+            </a>
+          </li>
+          <li>
+            <a [routerLink]="['/ds']">
+              Dashboard
+              <i class="material-icons right">dashboard</i>
+            </a>
+          </li>
+          <li>
+            <a [routerLink]="['usuario','contrasena']">
+              Cambiar contraseña
+              <i class="material-icons right">lock</i>
+            </a>
+          </li>
+          <li>
+            <a [routerLink]="" (click)="logOut()">
+              Cerrar sesión
+              <i class="material-icons right">power_settings_new</i>
+            </a>
+          </li>
+        </ul>
+      </div>
 
-          <!-- Dropdown Structure -->
-          <ul id="dropdown1" class="dropdown-content">
-            <li>
-              <a [routerLink]="['usuario','contrasena']">
-                 Cambiar contraseña
-                <i class="material-icons right">lock</i>
-              </a>
-            </li>
-            <li class="divider"></li>
-            <li>
-              <a [routerLink]="" (click)="logOut()">
-                Cerrar sesión
-                <i class="material-icons right">power_settings_new</i>
-              </a>
-            </li>
-          </ul>
-        </li>
-      </ul>
-      <ul class="sidenav" id="ul-mobile">
-        <li>
-          <a [routerLink]="['/ds']">
-            Dashboard
-            <i class="material-icons right">dashboard</i>
-          </a>
-        </li>
-      </ul>
     </div>
-
-  </div>
-</nav>
+  </nav>
+</div>
