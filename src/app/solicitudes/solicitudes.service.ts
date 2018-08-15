@@ -30,6 +30,7 @@ export class SolicitudesService {
 
     data.append('solicitud', solicitud.solicitud);
     data.append('descripcion', solicitud.descripcion);
+    data.append('keyDialogflow', solicitud.keyDialogflow);
 
     if (solicitud.archivo) { data.append('file', solicitud.archivo); }
 
