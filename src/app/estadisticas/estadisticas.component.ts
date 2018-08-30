@@ -50,18 +50,28 @@ export class EstadisticasComponent implements OnInit, AfterViewInit {
     const fechaHoy = moment();
     const fechaAnioAtras = moment().subtract(1, 'years');
 
+    const self = this;
+
     jQuery('#feDesde').datepicker({
       defaultDate: fechaAnioAtras.toDate(),
       format: 'dd/mm/yyyy',
       setDefaultDate: true,
-      onSelect: this.procesaEstadisticas()
+      onSelect: function (dateText) {
+        const fecha = moment(dateText);
+        jQuery('#feDesde').val(fecha.format('DD[/]MM[/]YYYY'));
+        self.procesaEstadisticas();
+      }
     });
 
     jQuery('#feHasta').datepicker({
       defaultDate: fechaHoy.toDate(),
       format: 'dd/mm/yyyy',
       setDefaultDate: true,
-      onSelect: this.procesaEstadisticas()
+      onSelect: function (dateText) {
+        const fecha = moment(dateText);
+        jQuery('#feHasta').val(fecha.format('DD[/]MM[/]YYYY'));
+        self.procesaEstadisticas();
+      }
     });
   }
 
@@ -151,7 +161,6 @@ export class EstadisticasComponent implements OnInit, AfterViewInit {
     };
 
     this.chartOpGeneralPorMes = new ChartOp('bar', data, {});
-
   }
 
   getCorreosAdmisionesPorMes() {
