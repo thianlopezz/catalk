@@ -50,30 +50,15 @@
           <table class="responsive-table highlight">
             <thead>
               <tr>
-                <th>No</th>
                 <th>Tipo de correo</th>
                 <th>Correo</th>
               </tr>
             </thead>          
             <tbody>
-              <tr>
-                <td>1</td>
-                <td>Curso de admisión</td>
+              <tr *ngFor="let correo of correos">
+                <td>{{correo.tipo}}</td>
                 <td>
-                  <a href="mailto:thianlopezz@gmail.com?subject=Seguimiento">thianlopezz@gmail.com</a>
-                </td>
-              </tr>
-              <tr>
-                <td>2</td>
-                <td>Curso de admisión</td>
-                <td>
-                  <a href="mailto:thianlopezz@gmail.com?subject=Seguimiento">thianlopezz@gmail.com</a>
-                </td>
-              </tr><tr>
-                <td>3</td>
-                <td>Curso de admisión</td>
-                <td>
-                  <a href="mailto:thianlopezz@gmail.com?subject=Seguimiento">thianlopezz@gmail.com</a>
+                  <a [href]="'mailto:'+ correo.correo +'?subject=Seguimiento'">{{correo.correo}}</a>
                 </td>
               </tr>
             </tbody>

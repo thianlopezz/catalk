@@ -15,7 +15,6 @@ function UsuarioDAO() {
                 if (err) {
                     callback(new Error(err));
                 } else if (_usuario) {
-                    console.log(_usuario);
                     callback(null, _usuario);
                 } else {
                     callback(new Error('Usuario o contraseña incorrecta.'));

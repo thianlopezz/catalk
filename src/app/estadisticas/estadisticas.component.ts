@@ -15,6 +15,7 @@ declare var M: any;
 export class EstadisticasComponent implements OnInit, AfterViewInit {
 
   estadisticas;
+  correos = [];
 
   chartOpGeneralPorMes: ChartOp;
 
@@ -31,6 +32,7 @@ export class EstadisticasComponent implements OnInit, AfterViewInit {
   ngOnInit() {
 
     this.getEstadisticas();
+    this.getEstadisticasCorreos();
   }
 
   ngAfterViewInit() {
@@ -608,6 +610,14 @@ export class EstadisticasComponent implements OnInit, AfterViewInit {
         this.procesaEstadisticas();
       }, error => {
 
+      });
+  }
+
+  getEstadisticasCorreos() {
+    this.estaditicasService.getEstadisticasCorreo()
+      .subscribe(response => {
+        this.correos = response.data;
+      }, error => {
       });
   }
 

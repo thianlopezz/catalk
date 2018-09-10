@@ -172,4 +172,11 @@ router.get('/estadisticas', (req, res) => {
     .catch(error => res.send({ success: false, mensaje: error.message, error }));
 });
 
+router.get('/estadisticas/correos', (req, res) => {
+
+  ContadoresDAO.getCorreos()
+    .then(datos => res.json({ success: true, data: datos }))
+    .catch(error => res.send({ success: false, mensaje: error.message, error }));
+});
+
 module.exports = router;

@@ -15,6 +15,12 @@ export class EstadisticasService {
       .pipe(map((response: Response) => response.json()));
   }
 
+  getEstadisticasCorreo() {
+
+    return this.http.get('/private/estadisticas/correos/', this.jwt())
+      .pipe(map((response: Response) => response.json()));
+  }
+
   private jwt() {
 
     const usuario = JSON.parse(localStorage.getItem('session'));

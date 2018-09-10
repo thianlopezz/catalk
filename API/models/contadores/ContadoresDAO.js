@@ -8,6 +8,22 @@ const TramitesDAO = require('../tramites/TramitesDAO');
 
 function ContadoresDAO() {
 
+    this.getCorreos = function(){
+
+        return new Promise((resolve, reject) => {
+
+            Contadores.find({ correo: { $exists: true } }).sort({ fe_creacion: -1 })
+                .then(correos => {
+                    console.log(correos);
+                    resolve(correos);
+                })
+                .catch(error => {
+                    console.log('Error al obtener los correos de seguimiento: ' + error.message);
+                    reject(error);
+                });
+        });
+    }
+
     this.insertar = function (model) {
         
         return new Promise((resolve, reject) => {
