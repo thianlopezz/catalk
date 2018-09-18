@@ -6,8 +6,6 @@ function RootController() {
 
     this.getAll = function (request, res) {
 
-        console.log(JSON.stringify(request));
-
         switch (request.queryResult.intent.displayName) {
             case 'info.admisiones': AdmisionesController.mapAction(request, res); break;
             case 'info.admisiones.tipo': AdmisionesController.mapAction(request, res); break;

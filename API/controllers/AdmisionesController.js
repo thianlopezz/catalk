@@ -16,9 +16,9 @@ function AdmisionesController() {
         console.log('Parameters>> ' + JSON.stringify(request.queryResult.parameters));
 
         switch (request.queryResult.action) {
-            case 'getInfoAdmisiones': getInfoAdmisiones(res); break;
-            case 'getInfoTipoAdmision': getInfoTipoAdmision(request.queryResult.parameters.tipoAdmisiones, res); break;
-            case 'enviaInfoAdmisiones': enviaInfoAdmisiones(request.queryResult.parameters.tipoAdmisiones, request.queryResult.parameters.email, res); break;
+            case 'getInfoAdmisiones': getInfoAdmisiones(request.originalDetectIntentRequest.source, res); break;
+            case 'getInfoTipoAdmision': getInfoTipoAdmision(request.queryResult.parameters.tipoAdmisiones, request.originalDetectIntentRequest.source, res); break;
+            case 'enviaInfoAdmisiones': enviaInfoAdmisiones(request.queryResult.parameters.tipoAdmisiones, request.originalDetectIntentRequest.source, request.queryResult.parameters.email, res); break;
             default: getInfoAdmisiones(res);
         }
     };
@@ -184,7 +184,7 @@ function AdmisionesController() {
         getDetalleAdmision(key, res);
     }
 
-    function getInfoAdmisiones(res) {
+    function getInfoAdmisiones(source, res) {
 
         let respuestas = [];
 
@@ -199,7 +199,11 @@ function AdmisionesController() {
                     },
                 });
 
-                respuestas = respuestas.concat(getTipoAdmisiones(tipoAdmisiones, 'CARTA'));
+                if (source ==='twitter'){
+                    respuestas = respuestas.concat(getTipoAdmisiones(tipoAdmisiones));
+                } else {
+                    respuestas = respuestas.concat(getTipoAdmisiones(tipoAdmisiones, 'CARTA'));
+                }                
 
                 respuestas.push({
                     text: {
@@ -299,10 +303,22 @@ function AdmisionesController() {
         } else {
 
             tipoAdmisiones.forEach(admision => {
+
+                // ENVIO DESCRIPCION
                 respuestas.push({
                     text: {
                         text: [
                             admision.tipoAdmision, (admision.descripcion || '')
+                        ],
+                    },
+                });
+
+                // ENVIO LINK DE DETALLE                
+                respuestas.push({
+                    text: {
+                        text: [
+                            'Más información aquí',
+                            URL_BASE + 'admisiones/ex/' + admision._id
                         ],
                     },
                 });
