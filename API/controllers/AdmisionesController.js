@@ -216,6 +216,8 @@ function AdmisionesController() {
                 // DEJO HUELLA
                 ContadoresDAO.insertar({ tipo: 'ADMISIONES' });
 
+                console.log(JSON.stringify(respuestas));
+
                 return res.send({
                     fulfillmentMessages: respuestas
                 });
