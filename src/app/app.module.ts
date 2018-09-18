@@ -58,6 +58,8 @@ import { TramitesService } from './tramites/tramites.service';
 import { SolicitudesService } from './solicitudes/solicitudes.service';
 import { UsuariosService } from './usuarios/usuarios.service';
 import { ParametrosService } from './parametros/parametros.service';
+import { PruebaComponent } from './prueba/prueba.component';
+import { PrivacidadComponent } from './privacidad/privacidad.component';
 
 @NgModule({
   declarations: [
@@ -104,7 +106,9 @@ import { ParametrosService } from './parametros/parametros.service';
     RecuperaContrasenaComponent,
     EstadisticasComponent,
     CardEstadisticaBarrasComponent,
-    CardEstadisticaLineasComponent
+    CardEstadisticaLineasComponent,
+    PruebaComponent,
+    PrivacidadComponent
   ],
   imports: [
     BrowserModule,

@@ -16,6 +16,7 @@ import { UsuariosComponent } from '../usuarios/usuarios.component';
 import { GenericoComponent } from '../generico/generico.component';
 import { EstadisticasComponent } from '../estadisticas/estadisticas.component';
 import { RouteActivatorService } from '../login/route-activator.service';
+import { PrivacidadComponent } from '../privacidad/privacidad.component';
 
 const appRoutes: Routes = [
     { path: '', component: LoginComponent },
@@ -47,6 +48,8 @@ const appRoutes: Routes = [
     { path: 'parametros', component: ParametrosComponent, canActivate: [RouteActivatorService] },
 
     { path: 'estadisticas', component: EstadisticasComponent, canActivate: [RouteActivatorService] },
+
+    { path: 'privacidad', component: PrivacidadComponent },
 
     // { path: 'home', component: HomeComponent, canActivate: [RouteActivatorService] },
 
