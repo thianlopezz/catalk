@@ -9,6 +9,7 @@ const CorreoController = require('../controllers/CorreoController');
 function AdmisionesController() {
 
     let fulfillmentText = '';
+    let source = '';
 
     this.mapAction = function (request, res) {
 
@@ -16,11 +17,14 @@ function AdmisionesController() {
         console.log('Intent>> ' + request.queryResult.intent.displayName);
         console.log('Action>> ' + request.queryResult.action);
         console.log('Parameters>> ' + JSON.stringify(request.queryResult.parameters));
+        console.log('Source>> ' + JSON.stringify(request.originalDetectIntentRequest.source));
+
+        source = request.originalDetectIntentRequest.source;
 
         switch (request.queryResult.action) {
-            case 'getInfoAdmisiones': getInfoAdmisiones(request.originalDetectIntentRequest.source, res); break;
-            case 'getInfoTipoAdmision': getInfoTipoAdmision(request.queryResult.parameters.tipoAdmisiones, request.originalDetectIntentRequest.source, res); break;
-            case 'enviaInfoAdmisiones': enviaInfoAdmisiones(request.queryResult.parameters.tipoAdmisiones, request.originalDetectIntentRequest.source, request.queryResult.parameters.email, res); break;
+            case 'getInfoAdmisiones': getInfoAdmisiones(res); break;
+            case 'getInfoTipoAdmision': getInfoTipoAdmision(request.queryResult.parameters.tipoAdmisiones, res); break;
+            case 'enviaInfoAdmisiones': enviaInfoAdmisiones(request.queryResult.parameters.tipoAdmisiones, request.queryResult.parameters.email, res); break;
             default: getInfoAdmisiones(res);
         }
     };
@@ -187,7 +191,7 @@ function AdmisionesController() {
         getDetalleAdmision(key, res);
     }
 
-    function getInfoAdmisiones(source, res) {
+    function getInfoAdmisiones(res) {
 
         let respuestas = [];
 
