@@ -219,6 +219,7 @@ function AdmisionesController() {
                 console.log(JSON.stringify(respuestas));
 
                 return res.send({
+                    fulfillmentText: 'Hello!',
                     fulfillmentMessages: respuestas
                 });
             })
