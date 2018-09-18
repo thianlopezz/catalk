@@ -8,6 +8,8 @@ const CorreoController = require('../controllers/CorreoController');
 
 function AdmisionesController() {
 
+    let fulfillmentText = '';
+
     this.mapAction = function (request, res) {
 
         console.log('<<##AdmisionesController##>>');
@@ -191,6 +193,8 @@ function AdmisionesController() {
         AdmisionesDAO.getAll()
             .then(tipoAdmisiones => {
 
+                fulfillmentText += 'Tenemos ' + tipoAdmisiones.length + ' tipos de admisiones:';
+
                 respuestas.push({
                     text: {
                         text: [
@@ -199,11 +203,13 @@ function AdmisionesController() {
                     },
                 });
 
-                if (source ==='twitter'){
+                if (source === 'twitter') {
                     respuestas = respuestas.concat(getTipoAdmisiones(tipoAdmisiones));
                 } else {
                     respuestas = respuestas.concat(getTipoAdmisiones(tipoAdmisiones, 'CARTA'));
-                }                
+                }
+
+                fulfillmentText += '\n¿En cuál estás interesado?';
 
                 respuestas.push({
                     text: {
@@ -216,10 +222,10 @@ function AdmisionesController() {
                 // DEJO HUELLA
                 ContadoresDAO.insertar({ tipo: 'ADMISIONES' });
 
-                console.log(JSON.stringify(respuestas));
+                console.log(fulfillmentText);
 
                 return res.send({
-                    fulfillmentText: 'Hello!',
+                    fulfillmentText,
                     fulfillmentMessages: respuestas
                 });
             })
@@ -250,6 +256,10 @@ function AdmisionesController() {
         if (tipo === 'CARTA') {
 
             tipoAdmisiones.forEach(admision => {
+
+                fulfillmentText += '\n\n -' + admision.tipoAdmision + '\n' + (admision.descripcion || '') + '\n';
+                fulfillmentText += '\tMás información aquí\n' + URL_BASE + 'admisiones/ex/' + admision._id;
+
                 respuestas.push({
                     card: {
                         title: admision.tipoAdmision,
@@ -264,48 +274,12 @@ function AdmisionesController() {
                     }
                 });
             });
-        } else if (tipo === 'LISTA') {
-
-            let listSelect = {
-                title: 'Lista',
-                items: []
-            }
+        }  else {
 
             tipoAdmisiones.forEach(admision => {
-                listSelect.items.push({
-                    "info": {
-                        "key": "key1",
-                        "synonyms": [
-                            "key"
-                        ]
-                    },
-                    "title": "item titulo",
-                    "description": "descripcion itme",
-                    "image": {}
-                }
-                    // ,
-                    // {
-                    //     "description": "Item Two Description",
-                    //     "image": {
-                    //         "url": "http://imageTwoUrl.com",
-                    //         "accessibilityText": "Image description for screen readers"
-                    //     },
-                    //     "optionInfo": {
-                    //         "key": "itemTwo",
-                    //         "synonyms": [
-                    //             "thing two",
-                    //             "object two"
-                    //         ]
-                    //     },
-                    //     "title": "Item Two"
-                    // }
-                );
-            });
 
-            respuestas.push({ listSelect });
-        } else {
-
-            tipoAdmisiones.forEach(admision => {
+                fulfillmentText += admision.tipoAdmision + '\n' + (admision.descripcion || '') + '\n';
+                fulfillmentText += 'Más información aquí\n' + URL_BASE + 'admisiones/ex/' + admision._id;
 
                 // ENVIO DESCRIPCION
                 respuestas.push({
