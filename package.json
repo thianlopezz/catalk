@@ -33,6 +33,7 @@
     "email-templates": "^2.7.1",
     "express": "^4.16.3",
     "jquery": "^3.3.1",
+    "handlebars": "^4.0.10",
     "jsonwebtoken": "^8.3.0",
     "jwt-decode": "^2.2.0",
     "materialize-css": "^1.0.0-rc.1",
