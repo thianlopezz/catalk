@@ -148,6 +148,7 @@ function AdmisionesController() {
                         // DEJO HUELLA
                         ContadoresDAO.insertar({ tipo: 'ADMISIONES', idTipo: admision._id, correo: correo });
 
+                        fulfillmentText += 'Listo, hemos enviado toda la información a tu correo.';
                         respuestas.push({
                             text: {
                                 text: [
@@ -222,8 +223,6 @@ function AdmisionesController() {
                 // DEJO HUELLA
                 ContadoresDAO.insertar({ tipo: 'ADMISIONES' });
 
-                console.log(fulfillmentText);
-
                 return res.send({
                     fulfillmentText,
                     fulfillmentMessages: respuestas
@@ -253,12 +252,12 @@ function AdmisionesController() {
 
         let respuestas = [];
 
-        if (tipo === 'CARTA') {
+        tipoAdmisiones.forEach(admision => {
 
-            tipoAdmisiones.forEach(admision => {
+            fulfillmentText += '\n\n -' + admision.tipoAdmision + '\n' + (admision.descripcion || '') + '\n';
+            fulfillmentText += '\tMás información aquí: ' + URL_BASE + 'admisiones/ex/' + admision._id;
 
-                fulfillmentText += '\n\n -' + admision.tipoAdmision + '\n' + (admision.descripcion || '') + '\n';
-                fulfillmentText += '\tMás información aquí\n' + URL_BASE + 'admisiones/ex/' + admision._id;
+            if (tipo === 'CARTA') {
 
                 respuestas.push({
                     card: {
@@ -273,13 +272,7 @@ function AdmisionesController() {
                         ]
                     }
                 });
-            });
-        }  else {
-
-            tipoAdmisiones.forEach(admision => {
-
-                fulfillmentText += admision.tipoAdmision + '\n' + (admision.descripcion || '') + '\n';
-                fulfillmentText += 'Más información aquí\n' + URL_BASE + 'admisiones/ex/' + admision._id;
+            } else {
 
                 // ENVIO DESCRIPCION
                 respuestas.push({
@@ -299,8 +292,8 @@ function AdmisionesController() {
                         ],
                     },
                 });
-            });
-        }
+            }
+        });
 
         return respuestas;
     }
@@ -312,6 +305,8 @@ function AdmisionesController() {
         AdmisionesDAO.getByKey(key)
             .then(admision => {
 
+                fulfillmentText += '\n' + admision.tipoAdmision;
+
                 respuestas.push({
                     text: {
                         text: [
@@ -321,6 +316,8 @@ function AdmisionesController() {
                 });
 
                 // VALOR ADMISION
+                let textValor = 'No tiene valor alguno.';
+
                 let objTextValor = {
                     text: {
                         text: [
@@ -332,6 +329,7 @@ function AdmisionesController() {
                 // EN CASO DE QUE TENGA VALOR
                 if (admision.valor) {
 
+                    let textValor = 'Tiene un valor de $' + admision.valor;
                     objTextValor = {
                         text: {
                             text: [
@@ -342,11 +340,13 @@ function AdmisionesController() {
                 }
 
                 // AGREGO A LOS MENSAJES
+                fulfillmentText += '\n' + textValor;
                 respuestas.push(
                     objTextValor
                 );
 
                 // FECHAS DE INICIO
+                let textFeIni = 'Aún no se define la fecha inicio.'
                 let objTextFeIni = {
                     text: {
                         text: [
@@ -358,6 +358,7 @@ function AdmisionesController() {
                 // EN CASO DE QUE TENGA FECHA DE INICIO DEFINIDA
                 if (admision.feInicio) {
 
+                    textFeIni = 'Inicia el ' + moment(admision.feInicio).format('DD[/]MM[/]YYYY');
                     objTextFeIni = {
                         text: {
                             text: [
@@ -368,11 +369,13 @@ function AdmisionesController() {
                 }
 
                 // AGREGO A LOS MENSAJES
+                fulfillmentText += '\n' + textFeIni;
                 respuestas.push(
                     objTextFeIni
                 );
 
                 // FECHAS DE FIN
+                let textFeFin = 'Aún no se define la fecha inicio.';
                 let objTextFeFin = {
                     text: {
                         text: [
@@ -385,6 +388,8 @@ function AdmisionesController() {
 
                     let prefix = (admision.feInicio) ? 'Y finaliza' : 'Finaliza'
 
+                    textFeFin = prefix + ' el ' + moment(admision.feFin).format('DD[/]MM[/]YYYY');
+
                     objTextFeFin = {
                         text: {
                             text: [
@@ -395,6 +400,7 @@ function AdmisionesController() {
                 }
 
                 // AGREGO A LOS MENSAJES
+                fulfillmentText += '\n' + textFeFin;
                 respuestas.push(
                     objTextFeFin
                 );
@@ -422,7 +428,8 @@ function AdmisionesController() {
                         text = text + '' + admision.detalles[i].descripcion + ' ' + URL_BASE + 'solicitudes/ex/' + admision.detalles[i].idSolicitud + '\n';
                     }
 
-                    respuestas.push(text = {
+                    fulfillmentText += '\n' + text;
+                    respuestas.push({
                         text: {
                             text: [
                                 text
@@ -431,6 +438,7 @@ function AdmisionesController() {
                     });
                 }
 
+                fulfillmentText += '\n' + '¿Deseas que te envíe todos los detalles y requisitos a tu correo?';
                 respuestas.push({
                     text: {
                         text: [
@@ -443,6 +451,7 @@ function AdmisionesController() {
                 ContadoresDAO.insertar({ tipo: 'ADMISIONES', idTipo: admision._id });
 
                 return res.send({
+                    fulfillmentText,
                     fulfillmentMessages: respuestas
                 });
             })
