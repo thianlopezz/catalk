@@ -33,6 +33,8 @@ function AdmisionesController() {
 
         let respuestas = [];
 
+        fulfillmentText = '';
+
         AdmisionesDAO.getByKey(tipoAdmision)
             .then(admision => {
 
@@ -97,8 +99,6 @@ function AdmisionesController() {
                             ${detalle.descripcion} 
                             <a href="${URL_BASE + 'solicitudes/ex/' + encodeURIComponent(detalle.idSolicitud)}">MODELO DE SOLICITUD</a>
                             </li>`;
-
-                        console.log('/' + detalle.idSolicitud + '.');
                     }
                 });
 
@@ -162,6 +162,7 @@ function AdmisionesController() {
                         })
 
                         return res.send({
+                            fulfillmentText,
                             fulfillmentMessages: respuestas
                         });
                     })
@@ -169,6 +170,7 @@ function AdmisionesController() {
 
                         console.log('Error >>' + error.message);
 
+                        fulfillmentText = 'Lo siento acaba de ocurrir un error que no esperábamos, en seguida te comunicamos con el CM.';
                         respuestas.push({
                             text: {
                                 text: [
@@ -178,6 +180,7 @@ function AdmisionesController() {
                         });
 
                         return res.send({
+                            fulfillmentText,
                             fulfillmentMessages: respuestas
                         });
                     });
@@ -187,7 +190,7 @@ function AdmisionesController() {
     }
 
     function getInfoTipoAdmision(key, res) {
-
+        fulfillmentText = '';
         getDetalleAdmision(key, res);
     }
 
@@ -195,11 +198,12 @@ function AdmisionesController() {
 
         let respuestas = [];
 
+        fulfillmentText = '';
+
         AdmisionesDAO.getAll()
             .then(tipoAdmisiones => {
 
                 fulfillmentText += 'Tenemos ' + tipoAdmisiones.length + ' tipos de admisiones:';
-
                 respuestas.push({
                     text: {
                         text: [
@@ -215,7 +219,6 @@ function AdmisionesController() {
                 }
 
                 fulfillmentText += '\n¿En cuál estás interesado?';
-
                 respuestas.push({
                     text: {
                         text: [
@@ -236,6 +239,7 @@ function AdmisionesController() {
 
                 console.log('Error >>' + error.message);
 
+                fulfillmentText = 'Lo siento acaba de ocurrir un error que no esperábamos, en seguida te comunicamos con el CM.';
                 respuestas.push({
                     text: {
                         text: [
@@ -245,6 +249,7 @@ function AdmisionesController() {
                 });
 
                 return res.send({
+                    fulfillmentText,
                     fulfillmentMessages: respuestas
                 });
             });
@@ -310,7 +315,6 @@ function AdmisionesController() {
             .then(admision => {
 
                 fulfillmentText += '\n' + admision.tipoAdmision;
-
                 respuestas.push({
                     text: {
                         text: [
@@ -321,7 +325,6 @@ function AdmisionesController() {
 
                 // VALOR ADMISION
                 let textValor = 'No tiene valor alguno.';
-
                 let objTextValor = {
                     text: {
                         text: [
@@ -333,7 +336,7 @@ function AdmisionesController() {
                 // EN CASO DE QUE TENGA VALOR
                 if (admision.valor) {
 
-                    let textValor = 'Tiene un valor de $' + admision.valor;
+                    textValor = 'Tiene un valor de $' + admision.valor;
                     objTextValor = {
                         text: {
                             text: [
@@ -463,6 +466,7 @@ function AdmisionesController() {
 
                 console.log('Error >>' + error.message);
 
+                fulfillmentText = 'Lo siento acaba de ocurrir un error que no esperábamos, en seguida te comunicamos con el CM.';
                 respuestas.push({
                     text: {
                         text: [
@@ -472,6 +476,7 @@ function AdmisionesController() {
                 });
 
                 return res.send({
+                    fulfillmentText,
                     fulfillmentMessages: respuestas
                 });
             });

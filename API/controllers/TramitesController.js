@@ -6,12 +6,18 @@ const CorreoController = require('../controllers/CorreoController');
 
 function TramitesController() {
 
+    let fulfillmentText = '';
+    let source = '';
+
     this.mapAction = function (request, res) {
 
         console.log('<<##TramitesController##>>');
         console.log('Intent>> ' + request.queryResult.intent.displayName);
         console.log('Action>> ' + request.queryResult.action);
         console.log('Parameters>> ' + JSON.stringify(request.queryResult.parameters));
+        console.log('Source>> ' + JSON.stringify(request.originalDetectIntentRequest.source));
+
+        source = request.originalDetectIntentRequest.source;
 
         switch (request.queryResult.action) {
             case 'getInfoTramites': getInfoTramites(res); break;
@@ -24,6 +30,8 @@ function TramitesController() {
     function enviaInfoTramites(tipoTramite, correo, res) {
 
         let respuestas = [];
+
+        fulfillmentText = '';
 
         TramitesDAO.getByKey(tipoTramite)
             .then(tramite => {
@@ -128,6 +136,7 @@ function TramitesController() {
                         // DEJO HUELLA
                         ContadoresDAO.insertar({ tipo: 'TRAMITES', idTipo: tramite._id, correo: correo });
 
+                        fulfillmentText += 'Listo, hemos enviado toda la información a tu correo.';
                         respuestas.push({
                             text: {
                                 text: [
@@ -137,6 +146,7 @@ function TramitesController() {
                         })
 
                         return res.send({
+                            fulfillmentText,
                             fulfillmentMessages: respuestas
                         });
                     })
@@ -144,6 +154,7 @@ function TramitesController() {
 
                         console.log('Error >>' + error.message);
 
+                        fulfillmentText = 'Lo siento acaba de ocurrir un error que no esperábamos, en seguida te comunicamos con el CM.';
                         respuestas.push({
                             text: {
                                 text: [
@@ -153,6 +164,7 @@ function TramitesController() {
                         });
 
                         return res.send({
+                            fulfillmentText,
                             fulfillmentMessages: respuestas
                         });
                     });
@@ -162,6 +174,9 @@ function TramitesController() {
     }
 
     function getInfoTipoTramite(key, res) {
+
+        fulfillmentText = '';
+
         getDetalleTramite(key, res);
     }
 
@@ -169,9 +184,12 @@ function TramitesController() {
 
         let respuestas = [];
 
+        fulfillmentText = '';
+
         TramitesDAO.getAll()
             .then(tramites => {
 
+                fulfillmentText += 'Tenemos ' + tramites.length + ' tipos de trámites';
                 respuestas.push({
                     text: {
                         text: [
@@ -182,6 +200,7 @@ function TramitesController() {
 
                 respuestas = respuestas.concat(getTipoTramites(tramites, 'CARTA'));
 
+                fulfillmentText += '\n¿En cuál estás interesado?';
                 respuestas.push({
                     text: {
                         text: [
@@ -194,6 +213,7 @@ function TramitesController() {
                 ContadoresDAO.insertar({ tipo: 'TRAMITES' });
 
                 return res.send({
+                    fulfillmentText,
                     fulfillmentMessages: respuestas
                 });
             })
@@ -201,6 +221,7 @@ function TramitesController() {
 
                 console.log('Error >>' + error.message);
 
+                fulfillmentText = 'Lo siento acaba de ocurrir un error que no esperábamos, en seguida te comunicamos con el CM.';
                 respuestas.push({
                     text: {
                         text: [
@@ -210,6 +231,7 @@ function TramitesController() {
                 });
 
                 return res.send({
+                    fulfillmentText,
                     fulfillmentMessages: respuestas
                 });
             });
@@ -221,9 +243,13 @@ function TramitesController() {
 
         let respuestas = [];
 
-        if (tipo === 'CARTA') {
+        tramites.forEach(tramite => {
 
-            tramites.forEach(tramite => {
+            fulfillmentText += '\n\n -' + tramite.tramite + '\n' + (tramite.descripcion || '') + '\n';
+            fulfillmentText += '\tMás información aquí: ' + URL_BASE + 'tramites/ex/' + tramite._id;
+
+            if (tipo === 'CARTA') {
+
                 respuestas.push({
                     card: {
                         title: tramite.tramite,
@@ -237,58 +263,28 @@ function TramitesController() {
                         ]
                     }
                 });
-            });
-        } else if (tipo === 'LISTA') {
+            } else {
 
-            let listSelect = {
-                title: 'Lista',
-                items: []
-            }
-
-            tramites.forEach(admision => {
-                listSelect.items.push({
-                    "info": {
-                        "key": "key1",
-                        "synonyms": [
-                            "key"
-                        ]
-                    },
-                    "title": "item titulo",
-                    "description": "descripcion itme",
-                    "image": {}
-                }
-                    // ,
-                    // {
-                    //     "description": "Item Two Description",
-                    //     "image": {
-                    //         "url": "http://imageTwoUrl.com",
-                    //         "accessibilityText": "Image description for screen readers"
-                    //     },
-                    //     "optionInfo": {
-                    //         "key": "itemTwo",
-                    //         "synonyms": [
-                    //             "thing two",
-                    //             "object two"
-                    //         ]
-                    //     },
-                    //     "title": "Item Two"
-                    // }
-                );
-            });
-
-            respuestas.push({ listSelect });
-        } else {
-
-            tramites.forEach(admision => {
+                // ENVIO DESCRIPCION
                 respuestas.push({
                     text: {
                         text: [
-                            admision.tipoAdmision, (admision.descripcion || '')
+                            tramite.tramite, (tramite.descripcion || '')
                         ],
                     },
                 });
-            });
-        }
+
+                // ENVIO LINK DE DETALLE                
+                respuestas.push({
+                    text: {
+                        text: [
+                            'Más información aquí',
+                            URL_BASE + 'tramites/ex/' + tramite._id
+                        ],
+                    },
+                });
+            }
+        });
 
         return respuestas;
     }
@@ -300,6 +296,8 @@ function TramitesController() {
         TramitesDAO.getByKey(key)
             .then(tramite => {
 
+                fulfillmentText += '\n' + tramite.tramite;
+
                 respuestas.push({
                     text: {
                         text: [
@@ -308,7 +306,8 @@ function TramitesController() {
                     },
                 });
 
-                // VALOR ADMISION
+                // VALOR TRAMITE
+                let textValor = 'No tiene valor alguno.';
                 let objTextValor = {
                     text: {
                         text: [
@@ -320,6 +319,7 @@ function TramitesController() {
                 // EN CASO DE QUE TENGA VALOR
                 if (tramite.valor) {
 
+                    textValor = 'Tiene un valor de $' + admision.valor;
                     objTextValor = {
                         text: {
                             text: [
@@ -330,6 +330,7 @@ function TramitesController() {
                 }
 
                 // AGREGO A LOS MENSAJES
+                fulfillmentText += '\n' + textValor;
                 respuestas.push(
                     objTextValor
                 );
@@ -357,6 +358,7 @@ function TramitesController() {
                         text = text + '' + tramite.detalles[i].descripcion + ' ' + URL_BASE + 'tramites/ex/' + tramite.detalles[i].idSolicitud + '\n';
                     }
 
+                    fulfillmentText += '\n' + text;
                     respuestas.push(text = {
                         text: {
                             text: [
@@ -366,6 +368,7 @@ function TramitesController() {
                     });
                 }
 
+                fulfillmentText += '\n' + '¿Deseas que te envíe todos los detalles y requisitos a tu correo?';
                 respuestas.push({
                     text: {
                         text: [
@@ -378,6 +381,7 @@ function TramitesController() {
                 ContadoresDAO.insertar({ tipo: 'TRAMITES', idTipo: tramite._id });
 
                 return res.send({
+                    fulfillmentText,
                     fulfillmentMessages: respuestas
                 });
             })
@@ -385,6 +389,7 @@ function TramitesController() {
 
                 console.log('Error >>' + error.message);
 
+                fulfillmentText = 'Lo siento acaba de ocurrir un error que no esperábamos, en seguida te comunicamos con el CM.';
                 respuestas.push({
                     text: {
                         text: [
@@ -394,6 +399,7 @@ function TramitesController() {
                 });
 
                 return res.send({
+                    fulfillmentText,
                     fulfillmentMessages: respuestas
                 });
             });

@@ -6,12 +6,18 @@ const CorreoController = require('../controllers/CorreoController');
 
 function SolicitudesController() {
 
+    let fulfillmentText = '';
+    let source = '';
+
     this.mapAction = function (request, res) {
 
         console.log('<<##SolicitudesController##>>');
         console.log('Intent>> ' + request.queryResult.intent.displayName);
         console.log('Action>> ' + request.queryResult.action);
         console.log('Parameters>> ' + JSON.stringify(request.queryResult.parameters));
+        console.log('Source>> ' + JSON.stringify(request.originalDetectIntentRequest.source));
+
+        source = request.originalDetectIntentRequest.source;
 
         switch (request.queryResult.action) {
             case 'getInfoSolicitudes': getInfoSolicitudes(res); break;
@@ -53,6 +59,7 @@ function SolicitudesController() {
                         // DEJO HUELLA
                         ContadoresDAO.insertar({ tipo: 'MODELOS', idTipo: solicitud._id, correo: correo });
 
+                        fulfillmentText += 'Listo, hemos enviado toda la información a tu correo.';
                         respuestas.push({
                             text: {
                                 text: [
@@ -62,6 +69,7 @@ function SolicitudesController() {
                         })
 
                         return res.send({
+                            fulfillmentText,
                             fulfillmentMessages: respuestas
                         });
                     })
@@ -69,6 +77,7 @@ function SolicitudesController() {
 
                         console.log('Error >>' + error.message);
 
+                        fulfillmentText = 'Lo siento acaba de ocurrir un error que no esperábamos, en seguida te comunicamos con el CM.';
                         respuestas.push({
                             text: {
                                 text: [
@@ -78,6 +87,7 @@ function SolicitudesController() {
                         });
 
                         return res.send({
+                            fulfillmentText,
                             fulfillmentMessages: respuestas
                         });
                     });
@@ -87,6 +97,7 @@ function SolicitudesController() {
     }
 
     function getInfoTipoSolicitud(key, res) {
+        fulfillmentText = '';
         getDetalleSolicitud(key, res);
     }
 
@@ -94,9 +105,12 @@ function SolicitudesController() {
 
         let respuestas = [];
 
+        fulfillmentText = '';
+
         SolicitudesDAO.getAll()
             .then(solicitudes => {
 
+                fulfillmentText += 'Tenemos ' + solicitudes.length + ' modelos de solicitudes:';
                 respuestas.push({
                     text: {
                         text: [
@@ -107,6 +121,7 @@ function SolicitudesController() {
 
                 respuestas = respuestas.concat(getModeloDeSolicitudes(solicitudes, 'CARTA'));
 
+                fulfillmentText += '\n¿En cuál estás interesado?';
                 respuestas.push({
                     text: {
                         text: [
@@ -119,6 +134,7 @@ function SolicitudesController() {
                 ContadoresDAO.insertar({ tipo: 'MODELOS' });
 
                 return res.send({
+                    fulfillmentText,
                     fulfillmentMessages: respuestas
                 });
             })
@@ -126,6 +142,7 @@ function SolicitudesController() {
 
                 console.log('Error >>' + error.message);
 
+                fulfillmentText = 'Lo siento acaba de ocurrir un error que no esperábamos, en seguida te comunicamos con el CM.';
                 respuestas.push({
                     text: {
                         text: [
@@ -135,6 +152,7 @@ function SolicitudesController() {
                 });
 
                 return res.send({
+                    fulfillmentText,
                     fulfillmentMessages: respuestas
                 });
             });
@@ -146,9 +164,13 @@ function SolicitudesController() {
 
         let respuestas = [];
 
-        if (tipo === 'CARTA') {
+        solicitudes.forEach(solicitud => {
 
-            solicitudes.forEach(solicitud => {
+            fulfillmentText += '\n\n -' + solicitud.solicitud + '\n' + (solicitud.descripcion || '') + '\n';
+            fulfillmentText += '\tMás información aquí: ' + URL_BASE + 'solicitudes/ex/' + solicitud._id;
+
+            if (tipo === 'CARTA') {
+
                 respuestas.push({
                     card: {
                         title: solicitud.solicitud,
@@ -162,58 +184,28 @@ function SolicitudesController() {
                         ]
                     }
                 });
-            });
-        } else if (tipo === 'LISTA') {
+            } else {
 
-            let listSelect = {
-                title: 'Lista',
-                items: []
-            }
-
-            solicitudes.forEach(admision => {
-                listSelect.items.push({
-                    "info": {
-                        "key": "key1",
-                        "synonyms": [
-                            "key"
-                        ]
-                    },
-                    "title": "item titulo",
-                    "description": "descripcion itme",
-                    "image": {}
-                }
-                    // ,
-                    // {
-                    //     "description": "Item Two Description",
-                    //     "image": {
-                    //         "url": "http://imageTwoUrl.com",
-                    //         "accessibilityText": "Image description for screen readers"
-                    //     },
-                    //     "optionInfo": {
-                    //         "key": "itemTwo",
-                    //         "synonyms": [
-                    //             "thing two",
-                    //             "object two"
-                    //         ]
-                    //     },
-                    //     "title": "Item Two"
-                    // }
-                );
-            });
-
-            respuestas.push({ listSelect });
-        } else {
-
-            solicitudes.forEach(admision => {
+                // ENVIO DESCRIPCION
                 respuestas.push({
                     text: {
                         text: [
-                            admision.tipoAdmision, (admision.descripcion || '')
+                            solicitud.solicitud, (solicitud.descripcion || '')
                         ],
                     },
                 });
-            });
-        }
+
+                // ENVIO LINK DE DETALLE                
+                respuestas.push({
+                    text: {
+                        text: [
+                            'Más información aquí',
+                            URL_BASE + 'solicitudes/ex/' + solicitud._id
+                        ],
+                    },
+                });
+            }
+        });
 
         return respuestas;
     }
@@ -225,6 +217,9 @@ function SolicitudesController() {
         SolicitudesDAO.getByKey(key)
             .then(solicitud => {
 
+                fulfillmentText += '\n' + solicitud.solicitud;
+                fulfillmentText += '\n' + solicitud.descripcion;
+                fulfillmentText += '\n' + `${URL_BASE + '' + encodeURIComponent(solicitud.archivo)}`;
                 respuestas.push({
                     text: {
                         text: [
@@ -233,6 +228,7 @@ function SolicitudesController() {
                     },
                 });
 
+                fulfillmentText += '\n' + '¿Deseas que te envíe todos los detalles y requisitos a tu correo?';
                 respuestas.push({
                     text: {
                         text: [
@@ -245,6 +241,7 @@ function SolicitudesController() {
                 ContadoresDAO.insertar({ tipo: 'MODELOS', idTipo: solicitud._id });
 
                 return res.send({
+                    fulfillmentText,
                     fulfillmentMessages: respuestas
                 });
             })
@@ -252,6 +249,7 @@ function SolicitudesController() {
 
                 console.log('Error >>' + error.message);
 
+                fulfillmentText = 'Lo siento acaba de ocurrir un error que no esperábamos, en seguida te comunicamos con el CM.';
                 respuestas.push({
                     text: {
                         text: [
@@ -261,6 +259,7 @@ function SolicitudesController() {
                 });
 
                 return res.send({
+                    fulfillmentText,
                     fulfillmentMessages: respuestas
                 });
             });
