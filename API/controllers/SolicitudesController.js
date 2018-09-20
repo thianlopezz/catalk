@@ -31,6 +31,8 @@ function SolicitudesController() {
 
         let respuestas = [];
 
+        fulfillmentText = '';
+
         SolicitudesDAO.getByKey(key)
             .then(solicitud => {
 
